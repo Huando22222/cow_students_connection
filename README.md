@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # cow_students_connection
 
 A new Flutter project.
@@ -14,3 +15,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# cow_students_connection
+>>>>>>> 257d8744cdac8f711dad3eb67b3870275181943f
