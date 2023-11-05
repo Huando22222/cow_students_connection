@@ -54,7 +54,10 @@ class LoginPage extends StatelessWidget {
                           ),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pushReplacementNamed(AppRoutes.register);
+                      },
                       child: Text(
                         "Sign up",
                         style: AppText.subtitle1,

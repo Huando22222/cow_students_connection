@@ -1,6 +1,7 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -32,7 +33,30 @@ class _MainPageState extends State<MainPage> {
       child: Text("Notification"),
     ),
     Center(
-      child: Text("User"),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          // Hình ảnh cá nhân
+          SvgPicture.asset(
+            "assets/images/logoHutech.svg",
+            width: 100, // Đặt chiều rộng mong muốn
+            height: 100,
+          ),
+
+          SizedBox(height: 20),
+          // Thông tin cá nhân
+          Text(
+            'Tên: Your Name',
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            'Tuổi: 30',
+            style: TextStyle(fontSize: 20),
+          ),
+          // Thêm thông tin cá nhân khác tại đây
+        ],
+      ),
     ),
   ];
   Menu currentIndex = Menu.home;

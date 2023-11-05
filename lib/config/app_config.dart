@@ -1,10 +1,12 @@
 import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';
+import 'package:cow_students_connection/pages/register.dart';
 
 class AppRoutes {
   static final pages = {
     login: (context) => LoginPage(),
+    register: (context) => Register(),
     home: (context) => HomePage(),
     //login: (context) => ChangeNotifierProvider(
     //       create: (context) => LoginProvider(),
@@ -17,6 +19,8 @@ class AppRoutes {
   };
 
   static const login = "/";
+  static const register = "/register";
+
   static const home = "/home";
   static const main = "/main";
   static const editProfile = "/edit_profile";
