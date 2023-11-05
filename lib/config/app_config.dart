@@ -8,6 +8,7 @@ class AppRoutes {
     login: (context) => LoginPage(),
     register: (context) => Register(),
     home: (context) => HomePage(),
+    register: (context) => Register(),
     //login: (context) => ChangeNotifierProvider(
     //       create: (context) => LoginProvider(),
     //       child: LoginPage(),
@@ -20,7 +21,6 @@ class AppRoutes {
 
   static const login = "/";
   static const register = "/register";
-
   static const home = "/home";
   static const main = "/main";
   static const editProfile = "/edit_profile";

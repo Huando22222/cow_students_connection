@@ -1,28 +1,3 @@
-// import 'package:cow_students_connection/config/app_config.dart';
-// import 'package:cow_students_connection/styles/app_colors.dart';
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       theme: ThemeData(
-//         fontFamily: "Urbanist",
-//         scaffoldBackgroundColor: AppColors.backGroundApp,
-//         brightness: Brightness.light,
-//       ),
-//       initialRoute: "/",
-//       routes: AppRoutes.pages,
-//     );
-//   }
-// }
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -61,10 +36,7 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       _checking = false;
     });
-    print("checking accessssssssssssssssssssssssssssssssssssssssss");
     if (accessToken != null) {
-      print("checking access accessToken");
-
       print("is Logged:::: ${prettyPrint(accessToken.toJson())}");
       // now you can call to  FacebookAuth.instance.getUserData();
       final userData = await FacebookAuth.instance.getUserData();
@@ -85,7 +57,7 @@ class _MyAppState extends State<MyApp> {
   Future<void> _login() async {
     final LoginResult result = await FacebookAuth.instance
         .login(); // by default we request the email and the public profile
-    print("checking access accessToken");
+
     // loginBehavior is only supported for Android devices, for ios it will be ignored
     // final result = await FacebookAuth.instance.login(  //nap vip mới có thể coi dc nhé dumeno
     //   permissions: [
