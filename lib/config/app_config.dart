@@ -6,6 +6,7 @@ import 'package:cow_students_connection/pages/register.dart';
 class AppRoutes {
   static final pages = {
     login: (context) => LoginPage(),
+    register: (context) => Register(),
     home: (context) => HomePage(),
     register: (context) => Register(),
     //login: (context) => ChangeNotifierProvider(
