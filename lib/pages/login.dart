@@ -58,8 +58,7 @@ class LoginPage extends StatelessWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context)
-                            .pushReplacementNamed(AppRoutes.register);
+                        Navigator.of(context).pushNamed(AppRoutes.register);
                       },
                       child: Text(
                         "Sign up",
@@ -73,7 +72,8 @@ class LoginPage extends StatelessWidget {
                   text: "Login",
                   backGroundBtnColor: AppColors.btnLoginColor,
                   onPressed: () {
-                    Navigator.of(context).pushReplacementNamed(AppRoutes.main);
+                    //pushReplacementNamed
+                    Navigator.of(context).pushNamed(AppRoutes.main);
                   },
                 ),
                 Spacer(),
@@ -120,14 +120,14 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-  Future _loginWithFacebook(BuildContext context) async {
-    final result = await FacebookAuth.instance.login();
+  // Future _loginWithFacebook(BuildContext context) async {
+  //   final result = await FacebookAuth.instance.login();
 
-    if (result.status == LoginStatus.success) {
-      _accessToken = result.accessToken;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoggedInPage(user: result.user)); // Chuyển đến trang LoggedInPage với thông tin user.
-    } else {
-      print("Login failed: ${result.message}");
-    }
-  }
+  //   if (result.status == LoginStatus.success) {
+  //     _accessToken = result.accessToken;
+  //     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoggedInPage(user: result.user)); // Chuyển đến trang LoggedInPage với thông tin user.
+  //   } else {
+  //     print("Login failed: ${result.message}");
+  //   }
+  // }
 }

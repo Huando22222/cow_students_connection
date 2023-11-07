@@ -1,9 +1,12 @@
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppTextField extends StatelessWidget {
   final String? hint;
-  const AppTextField({super.key, this.hint});
+  final TextInputType? keyboardType;
+  final ValueChanged<String>? onChanged;
+  const AppTextField({super.key, this.hint, this.keyboardType, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +28,8 @@ class AppTextField extends StatelessWidget {
           filled: true,
           fillColor: AppColors.field,
         ),
+        keyboardType: keyboardType ?? TextInputType.text,
+        onChanged: onChanged,
       ),
     );
   }
