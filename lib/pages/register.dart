@@ -1,5 +1,5 @@
 ///import 'package:cow_students_connection/components/app_otp.dart';
-import 'package:cow_students_connection/components/OTP.dart';
+import 'package:cow_students_connection/pages/OTP.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +24,8 @@ class _RegisterState extends State<Register> {
   // bool isPasswordFilled = false;
   // bool isPhoneFilled = false;
   TextEditingController countrycode = TextEditingController();
-  var phone = " ";
+  var phone = "";
+  var password = " ";
 
   @override
   Widget build(BuildContext context) {
@@ -63,15 +64,9 @@ class _RegisterState extends State<Register> {
                     ],
                   ),
                   Spacer(),
-                  AppTextField(
-                    hint: "Fullname",
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  AppTextField(
-                    hint: "Password",
-                  ),
+                  // AppTextField(
+                  //   hint: "Fullname",
+                  // ),
                   SizedBox(
                     height: 20,
                   ),
@@ -82,6 +77,16 @@ class _RegisterState extends State<Register> {
                       phone = value;
                     },
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                    hint: "Password",
+                    onChanged: (value) {
+                      password = value;
+                    },
+                  ),
+
                   SizedBox(
                     height: 20,
                   ),
@@ -119,7 +124,7 @@ class _RegisterState extends State<Register> {
 
                       await FirebaseAuth.instance.verifyPhoneNumber(
                         // phoneNumber: '+44 7123 123 456',
-                        phoneNumber: '+84 ${phone}',
+                        phoneNumber: '+84  ${phone}',
                         // phoneNumber: '${countrycode.text + phone}',
                         verificationCompleted:
                             (PhoneAuthCredential credential) {},
@@ -137,6 +142,7 @@ class _RegisterState extends State<Register> {
                       // }
                     },
                   ),
+                  Spacer(),
                   Spacer(),
                 ],
               ),

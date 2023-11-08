@@ -142,7 +142,8 @@ class _OTPPageState extends State<OTPPage> {
                 } catch (e) {
                   print("value code in catch ERROR: $smsCode");
                   print(
-                      "wrong at OTP\n-----------------------------------------------------------");
+                    "wrong at OTP\n-----------------------------------------------------------",
+                  );
                 }
               },
               child: const Text('Validate'),

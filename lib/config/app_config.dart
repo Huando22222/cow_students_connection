@@ -1,4 +1,4 @@
-import 'package:cow_students_connection/components/OTP.dart';
+import 'package:cow_students_connection/pages/OTP.dart';
 import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';

@@ -16,88 +16,97 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Column(
-              children: [
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                      "assets/images/logoHutech.svg",
-                      width: 100, // Đặt chiều rộng mong muốn
-                      height: 100,
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    Text(
-                      "From students\nto students",
-                      style: AppText.header2,
-                    ),
-                  ],
-                ),
-                Spacer(),
-                AppTextField(hint: "username"),
-                SizedBox(
-                  height: 20,
-                ),
-                AppTextField(hint: "password"),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      "don't have an account",
-                      style: AppText.subtitle3.copyWith(
-                          // fontSize: 20,
-                          ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed(AppRoutes.register);
-                      },
-                      child: Text(
-                        "Sign up",
-                        style: AppText.subtitle1,
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context)
+              .unfocus(); // Ẩn bàn phím khi người dùng nhấn vào không gian trống
+        },
+        child: SingleChildScrollView(
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height,
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                children: [
+                  Spacer(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        "assets/images/logoHutech.svg",
+                        width: 100, // Đặt chiều rộng mong muốn
+                        height: 100,
                       ),
-                    ),
-                  ],
-                ),
-                Spacer(),
-                AppButton(
-                  text: "Login",
-                  backGroundBtnColor: AppColors.btnLoginColor,
-                  onPressed: () {
-                    //pushReplacementNamed
-                    Navigator.of(context).pushNamed(AppRoutes.main);
-                  },
-                ),
-                Spacer(),
-                AppButton(
-                  text: "Login with google",
-                  backGroundBtnColor: AppColors.btnLoginWithGoogleColor,
-                  icon: AppIcons.ic_google,
-                  onPressed: () => _loginWithGoogle(context),
-                  // onPressed: () {
-                  //   signIn;
-                  // },
-                ),
-                AppButton(
-                  text: "Login with facebook",
-                  backGroundBtnColor: AppColors.btnLoginWithFacebookColor,
-                  icon: AppIcons.ic_facebook,
-                  onPressed: () => {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => FacebookLoginPage(),
-                    ))
-                  },
-                ),
-                Spacer(),
-              ],
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Text(
+                        "From students\nto students",
+                        style: AppText.header2,
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  AppTextField(
+                      hint: "phone number", keyboardType: TextInputType.phone),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  AppTextField(
+                      hint: "password",
+                      keyboardType: TextInputType.visiblePassword),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        "don't have an account",
+                        style: AppText.subtitle3.copyWith(
+                            // fontSize: 20,
+                            ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(AppRoutes.register);
+                        },
+                        child: Text(
+                          "Sign up",
+                          style: AppText.subtitle1,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Spacer(),
+                  AppButton(
+                    text: "Login",
+                    backGroundBtnColor: AppColors.btnLoginColor,
+                    onPressed: () {
+                      //pushReplacementNamed
+                      Navigator.of(context).pushNamed(AppRoutes.main);
+                    },
+                  ),
+                  Spacer(),
+                  AppButton(
+                    text: "Login with google",
+                    backGroundBtnColor: AppColors.btnLoginWithGoogleColor,
+                    icon: AppIcons.ic_google,
+                    onPressed: () => _loginWithGoogle(context),
+                    // onPressed: () {
+                    //   signIn;
+                    // },
+                  ),
+                  AppButton(
+                    text: "Login with facebook",
+                    backGroundBtnColor: AppColors.btnLoginWithFacebookColor,
+                    icon: AppIcons.ic_facebook,
+                    onPressed: () => {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => FacebookLoginPage(),
+                      ))
+                    },
+                  ),
+                  Spacer(),
+                ],
+              ),
             ),
           ),
         ),

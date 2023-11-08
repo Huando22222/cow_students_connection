@@ -1,5 +1,5 @@
 // class user {
-//   final String? name;
+//   final String? fullname;
 //   final String? email;
 //   final String? id;
 //   final String? image;
