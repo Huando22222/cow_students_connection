@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "62520559372",
+    "project_id": "cow-students-connection-404016",
+    "storage_bucket": "cow-students-connection-404016.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:62520559372:android:51e74624d0ba90d1f8eb29",
+        "android_client_info": {
+          "package_name": "com.example.cow_students_connection"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "62520559372-8h9ufsmfgqe7ejvbqacc5eqheq8gjpnn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cow_students_connection",
+            "certificate_hash": "4ecdfb6af17d37f2dd136ac3891cafe9988a3a7d"
+          }
+        },
+        {
+          "client_id": "62520559372-832qodfslqkg2l7aqircoive1v8m4khe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5va3d5Y5-XUVs-6kIpTkyxsqh_nq9TMk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "62520559372-832qodfslqkg2l7aqircoive1v8m4khe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

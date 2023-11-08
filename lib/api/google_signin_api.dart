@@ -33,6 +33,7 @@ class GoogleSignInApi {
       // final GoogleSignInAuthentication googleSignInAuthentication =
       //     await googleSignInAccount.authentication;
       // Xác thực và trả về thông tin người dùng
+      print(googleSignInAccount);
       return googleSignInAccount;
     } catch (e) {
       print("Error during login: $e");
