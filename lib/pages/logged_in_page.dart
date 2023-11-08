@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -57,6 +59,9 @@ class LoggedInPage extends StatelessWidget {
               user.email,
               style: TextStyle(color: Colors.white, fontSize: 15),
             ),
+            // Text(
+            //   prettyPrint(user),
+            // ),
             Spacer(),
           ],
         ),
@@ -64,3 +69,9 @@ class LoggedInPage extends StatelessWidget {
     );
   }
 }
+
+// String prettyPrint(GoogleSignInAccount json) {
+//   JsonEncoder encoder = const JsonEncoder.withIndent('  ');
+//   String pretty = encoder.convert(json);
+//   return pretty;
+// }

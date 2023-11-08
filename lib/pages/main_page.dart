@@ -1,12 +1,7 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
-import 'package:cow_students_connection/model/user.dart';
-import 'package:cow_students_connection/pages/profile.dart';
-import 'package:cow_students_connection/pages/profile.dart';
-import 'package:cow_students_connection/providers/user_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -37,25 +32,37 @@ class _MainPageState extends State<MainPage> {
     Center(
       child: Text("Notification"),
     ),
-    Profile(),
+    Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          // Hình ảnh cá nhân
+          SvgPicture.asset(
+            "assets/images/logoHutech.svg",
+            width: 100, // Đặt chiều rộng mong muốn
+            height: 100,
+          ),
+
+          SizedBox(height: 20),
+          // Thông tin cá nhân
+          Text(
+            'Tên: Your Name',
+            style: TextStyle(fontSize: 20),
+          ),
+          Text(
+            'Tuổi: 30',
+            style: TextStyle(fontSize: 20),
+          ),
+          // Thêm thông tin cá nhân khác tại đây
+        ],
+      ),
+    ),
   ];
   Menu currentIndex = Menu.home;
 
   @override
   Widget build(BuildContext context) {
-    final userProvider = Provider.of<UserProvider>(context);
-
-    // Thay đổi thông tin người dùng
-    userProvider.setUser(User(
-      displayName: 'John Doe',
-      email: 'john@example.com',
-      id: '123456',
-      photoUrl: 'https://example.com/johndoe.jpg',
-      serverAuthCode: 'authCode123',
-      idToken: 'token123',
-      // Các thông tin khác
-    ));
-
     return Scaffold(
       body: pages[currentIndex.index],
       bottomNavigationBar: CustomNavigation(

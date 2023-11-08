@@ -1,21 +1,15 @@
+import 'package:cow_students_connection/pages/OTP.dart';
 import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';
 import 'package:cow_students_connection/pages/register.dart';
-import 'package:cow_students_connection/providers/user_provider.dart';
-import 'package:provider/provider.dart';
 
 class AppRoutes {
   static final pages = {
-    login: (context) => MultiProvider(
-          providers: [
-            ChangeNotifierProvider(create: (context) => UserProvider()),
-          ],
-          child: LoginPage(),
-        ),
+    login: (context) => LoginPage(),
     register: (context) => Register(),
     home: (context) => HomePage(),
-    register: (context) => Register(),
+    otp: (context) => OTPPage(),
     //login: (context) => ChangeNotifierProvider(
     //       create: (context) => LoginProvider(),
     //       child: LoginPage(),
@@ -28,6 +22,7 @@ class AppRoutes {
 
   static const login = "/";
   static const register = "/register";
+  static const otp = "/otp";
   static const home = "/home";
   static const main = "/main";
   static const editProfile = "/edit_profile";
