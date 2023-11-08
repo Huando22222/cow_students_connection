@@ -1,15 +1,17 @@
 ///import 'package:cow_students_connection/components/app_otp.dart';
 import 'package:cow_students_connection/pages/OTP.dart';
+import 'package:cow_students_connection/providers/account_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:cow_students_connection/components/app_button.dart';
 import 'package:cow_students_connection/components/app_text_field.dart';
-import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -24,14 +26,16 @@ class _RegisterState extends State<Register> {
   // bool isPasswordFilled = false;
   // bool isPhoneFilled = false;
   TextEditingController countrycode = TextEditingController();
-  var phone = "";
-  var password = " ";
+  // var phone = context.read<AppRepo>().getPhone;
+  // var password = " ";
 
   @override
   Widget build(BuildContext context) {
     // bool isAllFieldsFilled =
     //     isFullnameFilled && isPasswordFilled && isPhoneFilled;
-
+    var phone = context.read<AppRepo>().getPhone;
+    var password = context.read<AppRepo>().getPassword;
+    ;
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -75,6 +79,13 @@ class _RegisterState extends State<Register> {
                     keyboardType: TextInputType.phone,
                     onChanged: (value) {
                       phone = value;
+                      context.read<AppRepo>().setPhone = value;
+                      print(
+                        "provider phone: ${context.read<AppRepo>().getPhone}",
+                      );
+                      print(
+                        "Password: ${phone}",
+                      );
                     },
                   ),
                   SizedBox(
@@ -84,6 +95,13 @@ class _RegisterState extends State<Register> {
                     hint: "Password",
                     onChanged: (value) {
                       password = value;
+                      context.read<AppRepo>().setPassword = value;
+                      print(
+                        "provider Password: ${context.read<AppRepo>().getPassword}",
+                      );
+                      print(
+                        "Password: ${password}",
+                      );
                     },
                   ),
 

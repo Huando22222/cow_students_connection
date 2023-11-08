@@ -1,7 +1,7 @@
 import 'package:cow_students_connection/api/google_signin_api.dart';
 import 'package:cow_students_connection/components/app_button.dart';
 import 'package:cow_students_connection/components/app_text_field.dart';
-import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
 import 'package:cow_students_connection/pages/facebook_login_page.dart';
 import 'package:cow_students_connection/pages/logged_in_page.dart';
