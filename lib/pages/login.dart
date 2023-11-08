@@ -120,14 +120,14 @@ class LoginPage extends StatelessWidget {
     }
   }
 
-  Future _loginWithFacebook(BuildContext context) async {
-    final result = await FacebookAuth.instance.login();
+//   Future _loginWithFacebook(BuildContext context) async {
+//     final result = await FacebookAuth.instance.login();
 
-    if (result.status == LoginStatus.success) {
-      _accessToken = result.accessToken;
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoggedInPage(user: result.user)); // Chuyển đến trang LoggedInPage với thông tin user.
-    } else {
-      print("Login failed: ${result.message}");
-    }
-  }
+//     if (result.status == LoginStatus.success) {
+//       _accessToken = result.accessToken;
+//       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoggedInPage(user: result.user)); // Chuyển đến trang LoggedInPage với thông tin user.
+//     } else {
+//       print("Login failed: ${result.message}");
+//     }
+//   }
 }

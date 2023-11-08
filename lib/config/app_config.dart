@@ -2,10 +2,17 @@ import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';
 import 'package:cow_students_connection/pages/register.dart';
+import 'package:cow_students_connection/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class AppRoutes {
   static final pages = {
-    login: (context) => LoginPage(),
+    login: (context) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => UserProvider()),
+          ],
+          child: LoginPage(),
+        ),
     register: (context) => Register(),
     home: (context) => HomePage(),
     register: (context) => Register(),
