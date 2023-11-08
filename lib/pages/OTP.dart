@@ -1,4 +1,4 @@
-import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/pages/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

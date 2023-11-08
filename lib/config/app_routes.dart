@@ -9,7 +9,6 @@ class AppRoutes {
     login: (context) => LoginPage(),
     register: (context) => Register(),
     home: (context) => HomePage(),
-    register: (context) => Register(),
     otp: (context) => OTPPage(),
     //login: (context) => ChangeNotifierProvider(
     //       create: (context) => LoginProvider(),

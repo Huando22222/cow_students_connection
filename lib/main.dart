@@ -1,9 +1,11 @@
 import 'dart:io';
 
-import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/config/app_routes.dart';
+import 'package:cow_students_connection/providers/account_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +20,14 @@ Future<void> main() async {
         )
       : await Firebase.initializeApp();
 
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => AppRepo(),
+      ),
+    ],
+    child: MyApp(),
+  ));
 }
 
 // void main() {
