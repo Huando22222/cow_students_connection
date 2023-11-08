@@ -5,16 +5,22 @@ import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
 import 'package:cow_students_connection/pages/facebook_login_page.dart';
 import 'package:cow_students_connection/pages/logged_in_page.dart';
+import 'package:cow_students_connection/providers/account_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var phone = context.read<AppRepo>().getPhone;
+    var password = context.read<AppRepo>().getPassword;
+
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -79,8 +85,25 @@ class LoginPage extends StatelessWidget {
                   AppButton(
                     text: "Login",
                     backGroundBtnColor: AppColors.btnLoginColor,
-                    onPressed: () {
+                    onPressed: () async {
+                      // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
+                      final response = await http.post(
+                        Uri.parse(
+                            'http://172.16.16.86:3000/user/login'), // Thay đổi URL và endpoint của bạn
+                        body: {
+                          'phone': phone, // Thay thế bằng tên người dùng
+                          'password': password, // Thay thế bằng mật khẩu
+                        },
+                      );
+
+                      if (response.statusCode == 200) {
+                        // Xử lý phản hồi từ máy chủ (nếu cần)
+                      } else {
+                        print(
+                            'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+                      }
                       //pushReplacementNamed
+
                       Navigator.of(context).pushNamed(AppRoutes.main);
                     },
                   ),

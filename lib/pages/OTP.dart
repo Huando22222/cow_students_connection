@@ -1,8 +1,11 @@
 import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/pages/register.dart';
+import 'package:cow_students_connection/providers/account_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
+import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({Key? key}) : super(key: key);
@@ -19,6 +22,8 @@ class _OTPPageState extends State<OTPPage> {
   //custom //////////////////////////////////
   final FirebaseAuth auth = FirebaseAuth.instance;
   var smsCode = "";
+  get phone => context.read<AppRepo>().getPhone;
+  get password => context.read<AppRepo>().getPassword;
   ///////////////////////////////////////////
   @override
   void dispose() {
@@ -138,7 +143,25 @@ class _OTPPageState extends State<OTPPage> {
                   await auth.signInWithCredential(credential);
                   focusNode.unfocus();
                   formKey.currentState!.validate();
+
                   Navigator.of(context).pushNamed(AppRoutes.login);
+
+                  // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
+                  final response = await http.post(
+                    Uri.parse(
+                        'http://172.16.16.86:3000/user/register'), // Thay đổi URL và endpoint của bạn
+                    body: {
+                      'phone': phone, // Thay thế bằng tên người dùng
+                      'password': password, // Thay thế bằng mật khẩu
+                    },
+                  );
+
+                  if (response.statusCode == 200) {
+                    // Xử lý phản hồi từ máy chủ (nếu cần)
+                  } else {
+                    print(
+                        'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+                  }
                 } catch (e) {
                   print("value code in catch ERROR: $smsCode");
                   print(
