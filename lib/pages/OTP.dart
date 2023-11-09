@@ -174,6 +174,7 @@ class _OTPPageState extends State<OTPPage> {
                         'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
                   }
                 } catch (e) {
+                  print("Register verify: ${Register.verify}");
                   print("value code in catch ERROR: $smsCode");
                   print(
                     "wrong at OTP\n-----------------------------------------------------------",
