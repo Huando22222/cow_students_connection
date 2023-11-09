@@ -18,8 +18,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var phone = context.read<AppRepo>().getPhone;
-    var password = context.read<AppRepo>().getPassword;
+    var phone = context.read<AppRepo>().phone;
+    var password = context.read<AppRepo>().password;
 
     return Scaffold(
       body: GestureDetector(

@@ -1,3 +1,4 @@
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/pages/register.dart';
 import 'package:cow_students_connection/providers/account_provider.dart';
@@ -22,8 +23,8 @@ class _OTPPageState extends State<OTPPage> {
   //custom //////////////////////////////////
   final FirebaseAuth auth = FirebaseAuth.instance;
   var smsCode = "";
-  get phone => context.read<AppRepo>().getPhone;
-  get password => context.read<AppRepo>().getPassword;
+  get phone => context.read<AppRepo>().phone;
+  get password => context.read<AppRepo>().password;
   ///////////////////////////////////////////
   @override
   void dispose() {
@@ -144,20 +145,30 @@ class _OTPPageState extends State<OTPPage> {
                   focusNode.unfocus();
                   formKey.currentState!.validate();
 
-                  Navigator.of(context).pushNamed(AppRoutes.login);
-
+                  // Navigator.of(context).pushNamed(AppRoutes.login);
+                  // print("${phone} ${password}");
                   // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
+
                   final response = await http.post(
                     Uri.parse(
-                        'http://172.16.16.86:3000/user/register'), // Thay đổi URL và endpoint của bạn
+                        '${AppConfig.baseUrl}user/register'), // Thay đổi URL và endpoint của bạn
+                    // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
                     body: {
                       'phone': phone, // Thay thế bằng tên người dùng
                       'password': password, // Thay thế bằng mật khẩu
+                      'displayName': "",
+                      "email": "",
+                      "id": "",
+                      "photoUrl": "",
                     },
                   );
 
                   if (response.statusCode == 200) {
                     // Xử lý phản hồi từ máy chủ (nếu cần)
+                    context.read<AppRepo>().password = ""; // security hehhee
+
+                    Navigator.of(context).pushNamed(AppRoutes.login);
+                    print("register success ${phone} ${password}");
                   } else {
                     print(
                         'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');

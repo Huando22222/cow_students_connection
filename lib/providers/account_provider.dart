@@ -2,26 +2,14 @@ import 'package:cow_students_connection/data/models/account.dart';
 import 'package:flutter/material.dart';
 
 class AppRepo extends ChangeNotifier {
-  String? _phone;
-  String? _password;
+  String? phone;
+  String? password;
+  String? gfullname;
+  String? gemail;
+  String? gid;
+  String? gimage;
 
-  set setPhone(String? value) {
-    notifyListeners(); // Thông báo rằng dữ liệu đã thay đổi
-    _phone = value;
-  }
+  // AppRepoAccount(this._phone)
 
-  String? get getPhone {
-    return _phone;
-  }
-
-  set setPassword(String? value) {
-    notifyListeners(); // Thông báo rằng dữ liệu đã thay đổi
-    _password = value;
-  }
-
-  String? get getPassword {
-    return _password;
-  }
-
-  account? _account;
+  account? Account;
 }
