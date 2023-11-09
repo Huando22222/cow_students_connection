@@ -1,9 +1,12 @@
 import 'dart:convert';
-
+import 'package:cow_students_connection/providers/account_provider.dart';
+import 'package:http/http.dart' as http;
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:cow_students_connection/api/google_signin_api.dart';
+import 'package:provider/provider.dart';
 
 class LoggedInPage extends StatelessWidget {
   final GoogleSignInAccount user;
@@ -13,6 +16,36 @@ class LoggedInPage extends StatelessWidget {
   ////////////////////????????????????//////////////////
   @override
   Widget build(BuildContext context) {
+    Future<void> registerUser() async {
+      try {
+        final response = await http.post(
+          Uri.parse('${AppConfig.baseUrl}user/register'),
+          body: {
+            "phone": "",
+            "password": "",
+            "displayName": user.displayName,
+            "email": user.email,
+            "id": user.id,
+            "photoUrl": user.photoUrl,
+          },
+        );
+
+        if (response.statusCode == 200) {
+          context.read<AppRepo>().displayName = user.displayName;
+          context.read<AppRepo>().email = user.email;
+          context.read<AppRepo>().id = user.id;
+          context.read<AppRepo>().photoUrl = user.photoUrl;
+          print("register success  ${user.id}");
+        } else {
+          print('Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+        }
+      } catch (e) {
+        print('Lỗi khi gửi thông tin đến máy chủ: $e');
+      }
+    }
+
+    registerUser(); // Gọi hàm ngay khi trang được tạo
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -23,6 +56,10 @@ class LoggedInPage extends StatelessWidget {
           TextButton(
             onPressed: () async {
               await GoogleSignInApi.logout();
+              context.read<AppRepo>().displayName = "";
+              context.read<AppRepo>().email = "";
+              context.read<AppRepo>().id = "";
+              context.read<AppRepo>().photoUrl = "";
               Navigator.of(context).pushReplacement(
                   MaterialPageRoute(builder: (context) => LoginPage()));
             },

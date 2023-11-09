@@ -4,11 +4,10 @@ import 'package:flutter/material.dart';
 class AppRepo extends ChangeNotifier {
   String? phone;
   String? password;
-  String? gfullname;
-  String? gemail;
-  String? gid;
-  String? gimage;
-
+  String? displayName;
+  String? email;
+  String? id;
+  String? photoUrl;
   // AppRepoAccount(this._phone)
 
   account? Account;
