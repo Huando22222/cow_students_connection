@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:cow_students_connection/api/google_signin_api.dart';
 import 'package:cow_students_connection/components/app_button.dart';
 import 'package:cow_students_connection/components/app_text_field.dart';
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
+import 'package:cow_students_connection/data/models/account.dart';
 import 'package:cow_students_connection/pages/facebook_login_page.dart';
 import 'package:cow_students_connection/pages/logged_in_page.dart';
 import 'package:cow_students_connection/providers/account_provider.dart';
@@ -18,9 +22,6 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var phone = context.read<AppRepo>().phone;
-    var password = context.read<AppRepo>().password;
-
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -54,13 +55,20 @@ class LoginPage extends StatelessWidget {
                   ),
                   Spacer(),
                   AppTextField(
-                      hint: "phone number", keyboardType: TextInputType.phone),
+                      hint: "phone number",
+                      keyboardType: TextInputType.phone,
+                      onChanged: (value) {
+                        context.read<AppRepo>().phone = value;
+                      }),
                   SizedBox(
                     height: 20,
                   ),
                   AppTextField(
                       hint: "password",
-                      keyboardType: TextInputType.visiblePassword),
+                      keyboardType: TextInputType.visiblePassword,
+                      onChanged: (value) {
+                        context.read<AppRepo>().password = value;
+                      }),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -87,24 +95,34 @@ class LoginPage extends StatelessWidget {
                     backGroundBtnColor: AppColors.btnLoginColor,
                     onPressed: () async {
                       // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
+                      print("TuanDZ");
                       final response = await http.post(
                         Uri.parse(
-                            'http://172.16.16.86:3000/user/login'), // Thay đổi URL và endpoint của bạn
+                            '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
+                        // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
                         body: {
-                          'phone': phone, // Thay thế bằng tên người dùng
-                          'password': password, // Thay thế bằng mật khẩu
+                          'phone': context
+                              .read<AppRepo>()
+                              .phone, // Thay thế bằng tên người dùng
+                          'password': context
+                              .read<AppRepo>()
+                              .password, // Thay thế bằng mật khẩu
                         },
                       );
 
                       if (response.statusCode == 200) {
-                        // Xử lý phản hồi từ máy chủ (nếu cần)
+                        final responseData = jsonDecode(response.body);
+                        final accountData =
+                            account.fromJson(responseData['data']);
+                        context.read<AppRepo>().Account = accountData;
+                        print(
+                            "Received user data: ${context.read<AppRepo>().Account!.phone}");
+                        Navigator.of(context).pushNamed(AppRoutes.main);
                       } else {
                         print(
                             'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
                       }
                       //pushReplacementNamed
-
-                      Navigator.of(context).pushNamed(AppRoutes.main);
                     },
                   ),
                   Spacer(),
