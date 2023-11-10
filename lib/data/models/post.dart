@@ -1,4 +1,4 @@
-class account {
+class post {
   // final String id;//k can vi server se tu generate
   final String? id;
   final String? ownerId;
@@ -7,7 +7,7 @@ class account {
   final String? likes;
   final String? createdAt;
 
-  account(
+  post(
     this.id,
     this.ownerId,
     this.message,
@@ -16,7 +16,7 @@ class account {
     this.createdAt,
   );
 
-  factory account.fromJson(Map<String, dynamic> json) => account(
+  factory post.fromJson(Map<String, dynamic> json) => post(
       json['_id'],
       json['ownerId'],
       json['message'],
