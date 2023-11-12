@@ -8,5 +8,6 @@ class AppColors {
   static const btnLoginWithFacebookColor = Color(0xff4285F4);
   static const navigationBarColor = Color(0xff7A86EF);
   static const borderBtnColor = Color(0xff000000);
-  static final field = const Color(0xffd9d9d9).withOpacity(0.6);
+  static final field = Color(0xffd9d9d9).withOpacity(0.6);
+  static final labelColor = Color.fromARGB(255, 197, 22, 22);
 }

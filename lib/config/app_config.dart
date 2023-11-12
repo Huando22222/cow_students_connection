@@ -1,5 +1,5 @@
 class AppConfig {
-  static const baseUrl = "http://172.16.16.57:3000/"; //ipconfig ipv4
-  //192.168.1.47 home
-  //172.16.16.57 tiem kiet
+  //ipconfig ipv4
+  static const baseUrl = "http://172.16.16.69:3000/"; //public
+  // static const baseUrl = "http://192.168.1.47:3000/"; //home
 }

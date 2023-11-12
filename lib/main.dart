@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cow_students_connection/config/app_routes.dart';
-import 'package:cow_students_connection/providers/account_provider.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +48,16 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: AppRoutes.pages,
+      onUnknownRoute: (settings) {
+        // Trả về một trang hoặc widget tùy thuộc vào nhu cầu của bạn.
+        return MaterialPageRoute(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: Text('Page not found! MAIN.dart'),
+            ),
+          ),
+        );
+      },
     );
   }
 }

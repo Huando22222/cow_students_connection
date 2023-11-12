@@ -1,4 +1,5 @@
 import 'package:cow_students_connection/data/models/account.dart';
+import 'package:cow_students_connection/data/models/user.dart';
 import 'package:flutter/material.dart';
 
 class AppRepo extends ChangeNotifier {
@@ -8,7 +9,7 @@ class AppRepo extends ChangeNotifier {
   String? email;
   String? id;
   String? photoUrl;
-  // AppRepoAccount(this._phone)
-
+  ////////////
   account? Account;
+  user? User;
 }

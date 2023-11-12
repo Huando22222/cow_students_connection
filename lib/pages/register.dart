@@ -1,7 +1,7 @@
 ///import 'package:cow_students_connection/components/app_otp.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/pages/OTP.dart';
-import 'package:cow_students_connection/providers/account_provider.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
