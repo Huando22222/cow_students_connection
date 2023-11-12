@@ -23,6 +23,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var phone;
+    var password; //test
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -56,20 +58,26 @@ class LoginPage extends StatelessWidget {
                   ),
                   Spacer(),
                   AppTextField(
-                      hint: "phone number",
-                      keyboardType: TextInputType.phone,
-                      onChanged: (value) {
-                        context.read<AppRepo>().phone = value;
-                      }),
+                    hint: "phone number",
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      context.read<AppRepo>().phone = value;
+                      phone = value;
+                      print("${phone} - ${password}");
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
                   AppTextField(
-                      hint: "password",
-                      keyboardType: TextInputType.visiblePassword,
-                      onChanged: (value) {
-                        context.read<AppRepo>().password = value;
-                      }),
+                    hint: "password",
+                    keyboardType: TextInputType.visiblePassword,
+                    onChanged: (value) {
+                      context.read<AppRepo>().password = value;
+                      password = value;
+                      print("${phone} - ${password}");
+                    },
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -96,6 +104,8 @@ class LoginPage extends StatelessWidget {
                     backGroundBtnColor: AppColors.btnLoginColor,
                     onPressed: () async {
                       print("TuanDZ");
+                      print(
+                          "${context.read<AppRepo>().phone}---------------------Server recieved ACCOUNT :${context.read<AppRepo>().password}--------------------");
                       final response = await http.post(
                         Uri.parse(
                             '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
@@ -106,6 +116,8 @@ class LoginPage extends StatelessWidget {
                       );
 
                       if (response.statusCode == 200) {
+                        print("---------------------Server recieved ACCOUNT");
+
                         final responseData = jsonDecode(response.body);
                         //account: acc
                         final accountData =
