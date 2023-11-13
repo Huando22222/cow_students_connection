@@ -7,9 +7,10 @@ import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
 import 'package:cow_students_connection/data/models/account.dart';
+import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/pages/facebook_login_page.dart';
 import 'package:cow_students_connection/pages/logged_in_page.dart';
-import 'package:cow_students_connection/providers/account_provider.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,8 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var phone;
+    var password; //test
     return Scaffold(
       body: GestureDetector(
         onTap: () {
@@ -55,20 +58,26 @@ class LoginPage extends StatelessWidget {
                   ),
                   Spacer(),
                   AppTextField(
-                      hint: "phone number",
-                      keyboardType: TextInputType.phone,
-                      onChanged: (value) {
-                        context.read<AppRepo>().phone = value;
-                      }),
+                    hint: "phone number",
+                    keyboardType: TextInputType.phone,
+                    onChanged: (value) {
+                      context.read<AppRepo>().phone = value;
+                      phone = value;
+                      print("${phone} - ${password}");
+                    },
+                  ),
                   SizedBox(
                     height: 20,
                   ),
                   AppTextField(
-                      hint: "password",
-                      keyboardType: TextInputType.visiblePassword,
-                      onChanged: (value) {
-                        context.read<AppRepo>().password = value;
-                      }),
+                    hint: "password",
+                    keyboardType: TextInputType.visiblePassword,
+                    onChanged: (value) {
+                      context.read<AppRepo>().password = value;
+                      password = value;
+                      print("${phone} - ${password}");
+                    },
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -91,43 +100,62 @@ class LoginPage extends StatelessWidget {
                   ),
                   Spacer(),
                   AppButton(
-                      text: "Login",
-                      backGroundBtnColor: AppColors.btnLoginColor,
-                      onPressed: () async {
-                        Navigator.of(context).pushNamed(AppRoutes.main);
-                      }
-                      // onPressed: () async {
-                      //   // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
-                      //   print("TuanDZ");
-                      //   final response = await http.post(
-                      //     Uri.parse(
-                      //         '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
-                      //     // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
-                      //     body: {
-                      //       'phone': context
-                      //           .read<AppRepo>()
-                      //           .phone, // Thay thế bằng tên người dùng
-                      //       'password': context
-                      //           .read<AppRepo>()
-                      //           .password, // Thay thế bằng mật khẩu
-                      //     },
-                      //   );
+                    text: "Login",
+                    backGroundBtnColor: AppColors.btnLoginColor,
+                    onPressed: () async {
+                      print("TuanDZ");
+                      print(
+                          "${context.read<AppRepo>().phone}---------------------Server recieved ACCOUNT :${context.read<AppRepo>().password}--------------------");
+                      final response = await http.post(
+                        Uri.parse(
+                            '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
+                        body: {
+                          'phone': context.read<AppRepo>().phone,
+                          'password': context.read<AppRepo>().password,
+                        },
+                      );
 
-                      //   if (response.statusCode == 200) {
-                      //     final responseData = jsonDecode(response.body);
-                      //     final accountData =
-                      //         account.fromJson(responseData['data']);
-                      //     context.read<AppRepo>().Account = accountData;
-                      //     print(
-                      //         "Received user data: ${context.read<AppRepo>().Account!.phone}");
-                      //     Navigator.of(context).pushNamed(AppRoutes.main);
-                      //   } else {
-                      //     print(
-                      //         'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
-                      //   }
-                      //   //pushReplacementNamed
-                      // },
-                      ),
+                      if (response.statusCode == 200) {
+                        print("---------------------Server recieved ACCOUNT");
+
+                        final responseData = jsonDecode(response.body);
+                        //account: acc
+                        final accountData =
+                            account.fromJson(responseData['account']);
+                        context.read<AppRepo>().Account = accountData;
+                        print(
+                            "${context.read<AppRepo>().phone} ${context.read<AppRepo>().password}");
+                        print(
+                            "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
+                        //user: user
+                        var userData = responseData['user'];
+                        if (userData == null) {
+                          //object
+                          print("user data have value null ( object )");
+                          Navigator.of(context).pushNamed(AppRoutes.welcome);
+                          // context.read<AppRepo>().User = userData;
+                          // print(
+                          //     "Received user data: ${context.read<AppRepo>().User!.firstName}");
+                          // Navigator.of(context).pushNamed(AppRoutes.main);
+                        } else {
+                          userData = user.fromJson(responseData['user']);
+                          context.read<AppRepo>().User = userData;
+                          print(
+                              'updated profile ${context.read<AppRepo>().User!.id} -- ${context.read<AppRepo>().User?.birthDay}\n');
+                          print(
+                              "user data have value ${context.read<AppRepo>().User!.id}");
+                          Navigator.of(context).pushNamed(AppRoutes.main);
+                        }
+                        //neviagave
+                      } else {
+                        print(
+                            'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+                      }
+
+                      // Navigator.of(context).pushNamed(AppRoutes.main);
+                      //pushReplacementNamed
+                    },
+                  ),
                   Spacer(),
                   AppButton(
                     text: "Login with google",

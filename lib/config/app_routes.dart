@@ -3,11 +3,13 @@ import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';
 import 'package:cow_students_connection/pages/register.dart';
+import 'package:cow_students_connection/pages/welcome.dart';
 
 class AppRoutes {
   static final pages = {
     login: (context) => LoginPage(),
     register: (context) => Register(),
+    welcome: (context) => WelcomePage(),
     home: (context) => HomePage(),
     otp: (context) => OTPPage(),
     //login: (context) => ChangeNotifierProvider(
@@ -22,9 +24,10 @@ class AppRoutes {
 
   static const login = "/";
   static const register = "/register";
+  static const welcome = "/welcome";
   static const otp = "/otp";
   static const home = "/home";
   static const main = "/main";
-  static const editProfile = "/edit_profile";
+  // static const editProfile = "/edit_profile";
   static const nearby = "/nearby";
 }

@@ -1,5 +1,5 @@
 class account {
-  // final String id;//k can vi server se tu generate
+  final String idAcc; //k can vi server se tu generate
   final String? phone;
   final String? password;
   final String? fullname;
@@ -8,6 +8,7 @@ class account {
   final String? image;
 
   account(
+    this.idAcc,
     this.phone,
     this.password,
     this.fullname,
@@ -16,6 +17,7 @@ class account {
     this.image,
   );
   factory account.fromJson(Map<String, dynamic> json) => account(
+      json['_id'],
       json['phone'],
       json['password'],
       json['fullname'],

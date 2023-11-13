@@ -1,22 +1,37 @@
-// class user {
-//   final String? firstName;
-//   final String? lastName;
-//   final String? avatar;
-//   final String? gender;
-//   final String? birthday;
-//   final String? phone;
-//   // displayName = data.displayName,
-//   //email = data.email,
-//   //id = data.id,
-//   //photoUrl = data.photoUrl,
-//   //serverAuthCode = data.serverAuthCode,
-//   //_idToken = data.idToken;
+class user {
+  final String? id;
+  final String? firstName;
+  final String? lastName;
+  final DateTime? birthDay;
+  final String? gender;
+  final String? avatar;
+  final String? phone;
+  final String idAcc;
 
-//   factory user.fromJson(Map<String, dynamic> json) => user(
-//         json['_id'],
-//         json['firstName'],
-//         json['middleName'],
-//         json['lastName'],
-//         json['age'],
-//       );
-// }
+  user(
+    this.id,
+    this.firstName,
+    this.lastName,
+    this.gender,
+    this.birthDay,
+    this.avatar,
+    this.phone,
+    this.idAcc,
+  );
+
+  factory user.fromJson(Map<String, dynamic> json) {
+    return user(
+      json['_id'],
+      json['firstName'],
+      json['lastName'],
+      json['gender'], // Có thể cần xử lý tùy thuộc vào dữ liệu thực tế
+      json['birthDay'] != null ? DateTime.parse(json['birthDay']) : null,
+      // json['birthDay'] != null && json['birthDay'] is String
+      //     ? DateTime.parse(json['birthDay'])
+      //     : json['birthDay'],
+      json['avatar'],
+      json['phone'],
+      json['idAcc'],
+    );
+  }
+}
