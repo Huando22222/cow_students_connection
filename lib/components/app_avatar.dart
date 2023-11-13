@@ -2,18 +2,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AppAvatar extends StatefulWidget {
   final double? size;
   final String? pathImage;
-  final Function(File?)? onImagePicked;
+  final void Function()? onImagePicked;
+  final File? image;
   const AppAvatar({
     Key? key,
     this.size,
     this.pathImage,
     this.onImagePicked,
+    this.image,
   }) : super(key: key);
 
   @override
@@ -21,47 +21,46 @@ class AppAvatar extends StatefulWidget {
 }
 
 class _AppAvatarState extends State<AppAvatar> {
-  File? image;
-  Future pickImage(ImageSource source) async {
-    try {
-      final image = await ImagePicker().pickImage(source: source);
-      if (image == null) return null;
+  // File? image;
+  // Future pickImage(ImageSource source) async {
+  //   try {
+  //     final image = await ImagePicker().pickImage(source: source);
+  //     if (image == null) return null;
 
-      final imageTemporary = File(image.path);
-      setState(() {
-        this.image = imageTemporary;
-        widget.onImagePicked?.call(imageTemporary);
-      });
-    } on PlatformException catch (e) {
-      print("Failed to pick image: $e");
-    }
-  }
+  //     final imageTemporary = File(image.path);
+  //     setState(() {
+  //       this.image = imageTemporary;
+  //       widget.onImagePicked?.call(imageTemporary);
+  //     });
+  //   } on PlatformException catch (e) {
+  //     print("Failed to pick image: $e");
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        pickImage(ImageSource.gallery);
-      },
-      child: ClipOval(
+    double? sized = widget.size ?? 40;
+    return ClipOval(
+      child: InkWell(
+        onTap: widget.onImagePicked,
         child: widget.pathImage != null
             ? Image.network(
                 widget.pathImage!,
-                height: widget.size ?? 40,
-                width: widget.size ?? 40,
+                height: sized,
+                width: sized,
                 fit: BoxFit.cover,
               )
-            : image != null
+            : widget.image != null
                 ? Image.file(
-                    image!,
-                    height: widget.size ?? 40,
-                    width: widget.size ?? 40,
+                    widget.image!,
+                    height: sized,
+                    width: sized,
                     fit: BoxFit.cover,
                   )
                 : Image.asset(
                     "assets/images/default_avatar.png",
-                    height: widget.size ?? 40,
-                    width: widget.size ?? 40,
+                    height: sized,
+                    width: sized,
                     fit: BoxFit.cover,
                   ),
       ),

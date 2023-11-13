@@ -7,8 +7,10 @@ import 'package:cow_students_connection/components/date_time_picker.dart';
 import 'package:cow_students_connection/components/dropdown_button.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
+import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/app_temp.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import "package:cow_students_connection/helper/image_picker_helper.dart";
@@ -41,6 +43,20 @@ class _WelcomePageState extends State<WelcomePage> {
     super.initState();
   }
 
+  void pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return null;
+
+      final imageTemporary = File(image.path);
+
+      this.avatar = imageTemporary;
+      setState(() {});
+    } on PlatformException catch (e) {
+      print("Failed to pick image: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     // Khởi tạo ImagePickerHelper
@@ -60,11 +76,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   Spacer(),
                   AppAvatar(
                     size: 200,
-                    onImagePicked: (File? pickedImage) {
-                      setState(() {
-                        avatar = pickedImage;
-                      });
-                    },
+                    onImagePicked: pickImage,
+                    image: avatar,
                   ),
                   Spacer(),
                   Row(
@@ -126,7 +139,7 @@ class _WelcomePageState extends State<WelcomePage> {
                     onPressed: () async {
                       final uri = Uri.parse('${AppConfig.baseUrl}user/profile');
                       final request = http.MultipartRequest('POST', uri);
-                   
+
                       request.fields['firstName'] = firstName;
                       request.fields['lastName'] = lastName;
                       request.fields['birthDay'] = birthDay!.toIso8601String();
@@ -150,8 +163,13 @@ class _WelcomePageState extends State<WelcomePage> {
                             await request.send());
 
                         if (response.statusCode == 200) {
-                          Navigator.of(context).pushNamed(AppRoutes.main);
-                          print(' updated profile');
+                          final responseData = jsonDecode(response.body);
+                          context.read<AppRepo>().User =
+                              user.fromJson(responseData["user"]);
+                          print(
+                              'updated profile ${context.read<AppRepo>().User!.id} \n ${context.read<AppRepo>().User!.birthDay}');
+                          Navigator.of(context)
+                              .pushReplacementNamed(AppRoutes.main);
                         } else {
                           print(
                               'Failed to updated profile Status code: ${response.statusCode}');
@@ -160,7 +178,7 @@ class _WelcomePageState extends State<WelcomePage> {
                         print('Error uploading image: $error');
                       }
                       print(
-                          "${firstName} ${lastName} ${birthDay?.toIso8601String()} ${selectedGender}  ${phone}  ${avatar} ${context.read<AppRepo>().Account!.idAcc}");
+                          "F&L:${firstName} ${lastName} Bd:${birthDay?.toIso8601String()} gender:${selectedGender}  phone:${phone}  avt:${avatar} idAcc:${context.read<AppRepo>().Account!.idAcc}");
                     },
                   ),
                 ],

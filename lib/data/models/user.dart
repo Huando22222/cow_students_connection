@@ -1,9 +1,8 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 class user {
   final String? id;
   final String? firstName;
   final String? lastName;
-  final String? birthDay;
+  final DateTime? birthDay;
   final String? gender;
   final String? avatar;
   final String? phone;
@@ -20,14 +19,19 @@ class user {
     this.idAcc,
   );
 
-  factory user.fromJson(Map<String, dynamic> json) => user(
-        json['_id'],
-        json['firstName'],
-        json['lastName'],
-        json['birthDay'],
-        json['gender'],
-        json['avatar'],
-        json['phone'],
-        json['idAcc'],
-      );
+  factory user.fromJson(Map<String, dynamic> json) {
+    return user(
+      json['_id'],
+      json['firstName'],
+      json['lastName'],
+      json['gender'], // Có thể cần xử lý tùy thuộc vào dữ liệu thực tế
+      json['birthDay'] != null ? DateTime.parse(json['birthDay']) : null,
+      // json['birthDay'] != null && json['birthDay'] is String
+      //     ? DateTime.parse(json['birthDay'])
+      //     : json['birthDay'],
+      json['avatar'],
+      json['phone'],
+      json['idAcc'],
+    );
+  }
 }

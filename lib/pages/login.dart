@@ -138,11 +138,12 @@ class LoginPage extends StatelessWidget {
                           //     "Received user data: ${context.read<AppRepo>().User!.firstName}");
                           // Navigator.of(context).pushNamed(AppRoutes.main);
                         } else {
-                          print("user data is filled");
-                          // userData = user.fromJson(responseData['user']);
-                          // context.read<AppRepo>().User = userData;
-                          // print(
-                          //     "user data have value ${context.read<AppRepo>().User!.id}");
+                          userData = user.fromJson(responseData['user']);
+                          context.read<AppRepo>().User = userData;
+                          print(
+                              'updated profile ${context.read<AppRepo>().User!.id} -- ${context.read<AppRepo>().User?.birthDay}\n');
+                          print(
+                              "user data have value ${context.read<AppRepo>().User!.id}");
                           Navigator.of(context).pushNamed(AppRoutes.main);
                         }
                         //neviagave
