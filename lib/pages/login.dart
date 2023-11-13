@@ -91,40 +91,43 @@ class LoginPage extends StatelessWidget {
                   ),
                   Spacer(),
                   AppButton(
-                    text: "Login",
-                    backGroundBtnColor: AppColors.btnLoginColor,
-                    onPressed: () async {
-                      // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
-                      print("TuanDZ");
-                      final response = await http.post(
-                        Uri.parse(
-                            '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
-                        // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
-                        body: {
-                          'phone': context
-                              .read<AppRepo>()
-                              .phone, // Thay thế bằng tên người dùng
-                          'password': context
-                              .read<AppRepo>()
-                              .password, // Thay thế bằng mật khẩu
-                        },
-                      );
-
-                      if (response.statusCode == 200) {
-                        final responseData = jsonDecode(response.body);
-                        final accountData =
-                            account.fromJson(responseData['data']);
-                        context.read<AppRepo>().Account = accountData;
-                        print(
-                            "Received user data: ${context.read<AppRepo>().Account!.phone}");
+                      text: "Login",
+                      backGroundBtnColor: AppColors.btnLoginColor,
+                      onPressed: () async {
                         Navigator.of(context).pushNamed(AppRoutes.main);
-                      } else {
-                        print(
-                            'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
                       }
-                      //pushReplacementNamed
-                    },
-                  ),
+                      // onPressed: () async {
+                      //   // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
+                      //   print("TuanDZ");
+                      //   final response = await http.post(
+                      //     Uri.parse(
+                      //         '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
+                      //     // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
+                      //     body: {
+                      //       'phone': context
+                      //           .read<AppRepo>()
+                      //           .phone, // Thay thế bằng tên người dùng
+                      //       'password': context
+                      //           .read<AppRepo>()
+                      //           .password, // Thay thế bằng mật khẩu
+                      //     },
+                      //   );
+
+                      //   if (response.statusCode == 200) {
+                      //     final responseData = jsonDecode(response.body);
+                      //     final accountData =
+                      //         account.fromJson(responseData['data']);
+                      //     context.read<AppRepo>().Account = accountData;
+                      //     print(
+                      //         "Received user data: ${context.read<AppRepo>().Account!.phone}");
+                      //     Navigator.of(context).pushNamed(AppRoutes.main);
+                      //   } else {
+                      //     print(
+                      //         'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+                      //   }
+                      //   //pushReplacementNamed
+                      // },
+                      ),
                   Spacer(),
                   AppButton(
                     text: "Login with google",

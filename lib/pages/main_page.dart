@@ -1,4 +1,5 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
+import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -20,9 +21,7 @@ enum Menu {
 
 class _MainPageState extends State<MainPage> {
   final pages = [
-    Center(
-      child: Text("Home dđ"),
-    ),
+    HomePage(),
     Center(
       child: Text("Message"),
     ),
