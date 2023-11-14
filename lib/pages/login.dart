@@ -119,7 +119,6 @@ class LoginPage extends StatelessWidget {
                         print("---------------------Server recieved ACCOUNT");
 
                         final responseData = jsonDecode(response.body);
-                        //account: acc
                         final accountData =
                             account.fromJson(responseData['account']);
                         context.read<AppRepo>().Account = accountData;
@@ -127,7 +126,6 @@ class LoginPage extends StatelessWidget {
                             "${context.read<AppRepo>().phone} ${context.read<AppRepo>().password}");
                         print(
                             "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
-                        //user: user
                         var userData = responseData['user'];
                         if (userData == null) {
                           //object
