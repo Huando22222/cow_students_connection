@@ -4,6 +4,8 @@ import 'package:cow_students_connection/pages/login.dart';
 import 'package:cow_students_connection/pages/main_page.dart';
 import 'package:cow_students_connection/pages/register.dart';
 import 'package:cow_students_connection/pages/welcome.dart';
+import 'package:cow_students_connection/providers/post_provider.dart';
+import 'package:provider/provider.dart';
 
 class AppRoutes {
   static final pages = {
@@ -11,6 +13,11 @@ class AppRoutes {
     register: (context) => Register(),
     welcome: (context) => WelcomePage(),
     home: (context) => HomePage(),
+    // home: (context) => ChangeNotifierProvider(
+    //       create: (context) => PostProvider(),
+    //       child: HomePage(),
+    //     ),
+
     otp: (context) => OTPPage(),
     //login: (context) => ChangeNotifierProvider(
     //       create: (context) => LoginProvider(),

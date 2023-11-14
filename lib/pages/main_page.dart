@@ -1,8 +1,10 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
 import 'package:cow_students_connection/pages/home.dart';
+import 'package:cow_students_connection/providers/post_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -21,7 +23,10 @@ enum Menu {
 
 class _MainPageState extends State<MainPage> {
   final pages = [
-    HomePage(),
+    ChangeNotifierProvider(
+      create: (context) => PostProvider(),
+      child: HomePage(),
+    ),
     Center(
       child: Text("Message"),
     ),
