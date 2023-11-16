@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/data/models/post.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
+import 'package:cow_students_connection/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +23,6 @@ class AppPostNews extends StatefulWidget {
 class _AppPostNewsState extends State<AppPostNews> {
   File? image;
   TextEditingController _contentPost = TextEditingController();
-  bool isContentNotEmpty = false;
 
   Future pickImage(ImageSource source) async {
     try {
@@ -63,6 +66,12 @@ class _AppPostNewsState extends State<AppPostNews> {
 
       if (response.statusCode == 200) {
         print('Post uploaded successfully');
+        final responseData = jsonDecode(response.body);
+        post newPost = post.fromJson(responseData['post']);
+        context.read<PostProvider>().addPost(newPost);
+        removeImage();
+        _contentPost.text = "";
+        print('Fname ${newPost.message}');
       } else {
         print('Failed to upload post. Status code: ${response.statusCode}');
       }
@@ -85,17 +94,13 @@ class _AppPostNewsState extends State<AppPostNews> {
       children: [
         Row(
           children: [
-            AppAvatar(),
+            AppAvatar(pathImage: context.read<AppRepo>().User!.avatar),
+            SizedBox(width: 10),
             Expanded(
               child: TextField(
                 controller: _contentPost,
                 decoration: InputDecoration(hintText: "what's news "),
                 maxLines: null,
-                onChanged: (content) {
-                  setState(() {
-                    isContentNotEmpty = content.isNotEmpty;
-                  });
-                },
               ),
             ),
             InkWell(
@@ -139,7 +144,7 @@ class _AppPostNewsState extends State<AppPostNews> {
           ),
 
         // Hiển thị nút "Đăng bài" chỉ khi có nội dung hoặc hình ảnh
-        if (isContentNotEmpty || image != null)
+        if (_contentPost.text != "" || image != null)
           ElevatedButton(
             onPressed: () {
               // Call the uploadImages function here

@@ -27,7 +27,10 @@ class AppPosted extends StatelessWidget {
           Row(
             children: [
               // AppAvatar(pathImage: Post.owner!.avatar),
-              AppAvatar(),
+              AppAvatar(
+                pathImage: Post.owner!.avatar,
+              ),
+              SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
