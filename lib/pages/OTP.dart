@@ -177,7 +177,7 @@ class _OTPPageState extends State<OTPPage> {
                   print("Register verify: ${Register.verify}");
                   print("value code in catch ERROR: $smsCode");
                   print(
-                    "wrong at OTP\n-----------------------------------------------------------",
+                    " $e wrong at OTP\n-----------------------------------------------------------",
                   );
                 }
               },
