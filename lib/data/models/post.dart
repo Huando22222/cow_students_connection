@@ -1,15 +1,17 @@
+import 'package:cow_students_connection/data/models/user.dart';
+
 class post {
   // final String id;//k can vi server se tu generate
   final String? id;
-  final String? ownerId;
+  final user? owner;
   final String? message;
   final String? images;
-  final String? likes;
-  final String? createdAt;
+  final int? likes;
+  final DateTime? createdAt;
 
   post(
     this.id,
-    this.ownerId,
+    this.owner,
     this.message,
     this.images,
     this.likes,
@@ -17,10 +19,12 @@ class post {
   );
 
   factory post.fromJson(Map<String, dynamic> json) => post(
-      json['_id'],
-      json['ownerId'],
-      json['message'],
-      json['images'],
-      json['likes'],
-      json['createdAt']);
+        json['_id'],
+        json['owner'] == null ? null : user.fromJson(json["owner"]),
+        json['message'],
+        json['images'],
+        json['likes'],
+        // json['createdAt'],
+        DateTime.parse(json['createdAt']),
+      );
 }

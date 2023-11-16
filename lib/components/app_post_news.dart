@@ -40,7 +40,7 @@ class _AppPostNewsState extends State<AppPostNews> {
     final request = http.MultipartRequest('POST', uri);
 
     // Thêm các trường văn bản vào yêu cầu
-    request.fields['ownerId'] = context.read<AppRepo>().User!.id!;
+    request.fields['owner'] = context.read<AppRepo>().User!.id!;
     request.fields['message'] = _contentPost.text;
     // request.fields['likes'] = '0';
 

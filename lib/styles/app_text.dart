@@ -34,4 +34,9 @@ class AppText {
     fontSize: 14,
     fontWeight: FontWeight.w400,
   );
+
+  static const note = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w100,
+  );
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:io';
 
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:flutter/material.dart';
 
 class AppAvatar extends StatefulWidget {
@@ -43,26 +44,27 @@ class _AppAvatarState extends State<AppAvatar> {
     return ClipOval(
       child: InkWell(
         onTap: widget.onImagePicked,
-        child: widget.pathImage != null
-            ? Image.network(
-                widget.pathImage!,
-                height: sized,
-                width: sized,
-                fit: BoxFit.cover,
-              )
-            : widget.image != null
-                ? Image.file(
-                    widget.image!,
+        child:
+            widget.pathImage != null //replace null with empty string to avoid
+                ? Image.network(
+                    "${AppConfig.baseUrl}images/${widget.pathImage!}",
                     height: sized,
                     width: sized,
                     fit: BoxFit.cover,
                   )
-                : Image.asset(
-                    "assets/images/default_avatar.png",
-                    height: sized,
-                    width: sized,
-                    fit: BoxFit.cover,
-                  ),
+                : widget.image != null
+                    ? Image.file(
+                        widget.image!,
+                        height: sized,
+                        width: sized,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "assets/images/default_avatar.png",
+                        height: sized,
+                        width: sized,
+                        fit: BoxFit.cover,
+                      ),
       ),
     );
   }
