@@ -1,16 +1,6 @@
-import 'dart:io';
-import 'dart:convert';
-import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/components/app_post_news.dart';
 import 'package:cow_students_connection/components/app_posted.dart';
-import 'package:cow_students_connection/config/app_config.dart';
-import 'package:cow_students_connection/providers/app_repo.dart';
-import 'package:http_parser/http_parser.dart';
-import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
