@@ -86,6 +86,10 @@ class _AppPostNewsState extends State<AppPostNews> {
     });
   }
 
+  bool canPost() {
+    return _contentPost.text.isNotEmpty || image != null;
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -144,24 +148,22 @@ class _AppPostNewsState extends State<AppPostNews> {
           ),
 
         // Hiển thị nút "Đăng bài" chỉ khi có nội dung hoặc hình ảnh
-        if (_contentPost.text != "" || image != null)
-          ElevatedButton(
-            onPressed: () {
-              // Call the uploadImages function here
-
-              {
-                // Call the uploadImages function here
-                uploadImages(image);
-              }
-
-              //else {
-              //   // Handle case when content or image is empty
-              //   print("Content or image is empty");
-              // }
-              print('hihihi ${image}');
-            },
-            child: Text("Đăng bài"),
+        AnimatedOpacity(
+          opacity: canPost() ? 1.0 : 0.0,
+          duration: Duration(milliseconds: 500),
+          child: IgnorePointer(
+            ignoring: !canPost(),
+            child: ElevatedButton(
+              onPressed: () {
+                if (canPost()) {
+                  // Call the uploadImages function here
+                  uploadImages(image);
+                }
+              },
+              child: Text("Đăng bài"),
+            ),
           ),
+        ),
       ],
     );
   }
