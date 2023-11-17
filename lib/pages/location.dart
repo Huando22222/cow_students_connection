@@ -1,10 +1,12 @@
+import 'dart:async';
+
 import 'package:cow_students_connection/components/app_avatar.dart';
-import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
 
 class Location extends StatefulWidget {
@@ -12,27 +14,59 @@ class Location extends StatefulWidget {
   _LocationState createState() => _LocationState();
 }
 
+StreamSubscription<Position>? _positionStream;
+
 class _LocationState extends State<Location> {
   MapController mapController = MapController();
-  LatLng currentLocation = LatLng(10.8022000, 106.7149815); // Default location
+  LatLng currentLocation = LatLng(0.0, 0.0); // Default location
   double currentZoom = 13.0;
+  InAppWebViewController? _webViewController;
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    _initLocationUpdates();
   }
 
-  Future<void> _getCurrentLocation() async {
-    try {
-      Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high,
-      );
+  void _initLocationUpdates() async {
+    var status = await Geolocator.checkPermission();
+
+    if (status == LocationPermission.denied) {
+      await Geolocator.requestPermission();
+      _startListeningToLocation();
+    } else if (status == LocationPermission.always ||
+        status == LocationPermission.whileInUse) {
+      _startListeningToLocation();
+    }
+  }
+
+  void _startListeningToLocation() {
+    _positionStream =
+        Geolocator.getPositionStream().listen((Position position) {
       setState(() {
         currentLocation = LatLng(position.latitude, position.longitude);
+        mapController.move(currentLocation, currentZoom);
       });
-    } catch (e) {
-      print('Error: $e');
+    });
+  }
+
+  @override
+  void dispose() {
+    _positionStream?.cancel();
+    super.dispose();
+  }
+
+  void _openInGoogleMaps() async {
+    print(
+        'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}');
+    String googleUrl =
+        'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}';
+
+    if (_webViewController != null) {
+      await _webViewController!
+          .loadUrl(urlRequest: URLRequest(url: Uri.parse(googleUrl)));
+      print(
+          'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}');
     }
   }
 
@@ -120,6 +154,11 @@ class _LocationState extends State<Location> {
             onPressed: _goToCurrentLocation,
             child: Icon(Icons.my_location),
           ),
+          SizedBox(height: 10),
+          FloatingActionButton(
+            onPressed: _openInGoogleMaps,
+            child: Icon(Icons.map),
+          )
         ],
       ),
     );
