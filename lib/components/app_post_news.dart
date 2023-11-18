@@ -23,7 +23,7 @@ class AppPostNews extends StatefulWidget {
 class _AppPostNewsState extends State<AppPostNews> {
   File? image;
   TextEditingController _contentPost = TextEditingController();
-
+  String? content = "";
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -87,7 +87,7 @@ class _AppPostNewsState extends State<AppPostNews> {
   }
 
   bool canPost() {
-    return _contentPost.text.isNotEmpty || image != null;
+    return content!.isNotEmpty || image != null;
   }
 
   @override
@@ -103,6 +103,9 @@ class _AppPostNewsState extends State<AppPostNews> {
             Expanded(
               child: TextField(
                 controller: _contentPost,
+                onChanged: (value) {
+                  content = value;
+                },
                 decoration: InputDecoration(hintText: "what's news "),
                 maxLines: null,
               ),

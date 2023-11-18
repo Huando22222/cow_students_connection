@@ -1,13 +1,14 @@
-import 'dart:async';
-
 import 'package:cow_students_connection/components/app_avatar.dart';
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:provider/provider.dart';
+import 'dart:async';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -20,22 +21,24 @@ class _LocationState extends State<Location> {
   MapController mapController = MapController();
   LatLng currentLocation = LatLng(0.0, 0.0); // Default location
   double currentZoom = 13.0;
-  InAppWebViewController? _webViewController;
 
   @override
   void initState() {
     super.initState();
     _initLocationUpdates();
+    _startListeningToLocation();
   }
 
   void _initLocationUpdates() async {
-    var status = await Geolocator.checkPermission();
+    var status = await Permission.location.status;
 
-    if (status == LocationPermission.denied) {
-      await Geolocator.requestPermission();
-      _startListeningToLocation();
-    } else if (status == LocationPermission.always ||
-        status == LocationPermission.whileInUse) {
+    if (!status.isGranted) {
+      if (await Permission.location.request().isGranted) {
+        // Quyền truy cập vị trí đã được cấp, bắt đầu lắng nghe vị trí
+        _startListeningToLocation();
+      }
+    } else {
+      // Quyền truy cập vị trí đã được cấp, bắt đầu lắng nghe vị trí
       _startListeningToLocation();
     }
   }
@@ -45,7 +48,6 @@ class _LocationState extends State<Location> {
         Geolocator.getPositionStream().listen((Position position) {
       setState(() {
         currentLocation = LatLng(position.latitude, position.longitude);
-        mapController.move(currentLocation, currentZoom);
       });
     });
   }
@@ -56,17 +58,14 @@ class _LocationState extends State<Location> {
     super.dispose();
   }
 
-  void _openInGoogleMaps() async {
-    print(
-        'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}');
-    String googleUrl =
+  Future<void> _openInGoogleMaps() async {
+    final url =
         'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}';
 
-    if (_webViewController != null) {
-      await _webViewController!
-          .loadUrl(urlRequest: URLRequest(url: Uri.parse(googleUrl)));
-      print(
-          'https://www.google.com/maps/search/?api=1&query=${currentLocation.latitude},${currentLocation.longitude}');
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
     }
   }
 
@@ -118,17 +117,46 @@ class _LocationState extends State<Location> {
                 width: 60,
                 height: 60,
                 rotate: true,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(
-                        45), // Đảm bảo borderRadius lớn hơn hoặc bằng nửa kích thước
-                    border: Border.all(
-                      color: Colors.lightBlueAccent,
-                      width: 4, // Điều chỉnh độ dày của viền tại đây
+                child: InkWell(
+                  child: InkWell(
+                    onTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return Container(
+                            color: Colors.white,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                ListTile(
+                                  title: Text(
+                                      'Latitude: ${currentLocation.latitude}'),
+                                  subtitle: Text(
+                                      'Longitude: ${currentLocation.longitude}'),
+                                ),
+                                ElevatedButton(
+                                  onPressed: _openInGoogleMaps,
+                                  child: Text('Open in Google Maps'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                            45), // Đảm bảo borderRadius lớn hơn hoặc bằng nửa kích thước
+                        border: Border.all(
+                          color: Colors.lightBlueAccent,
+                          width: 4, // Điều chỉnh độ dày của viền tại đây
+                        ),
+                      ),
+                      child: AppAvatar(
+                        pathImage: context.read<AppRepo>().User!.avatar,
+                      ),
                     ),
-                  ),
-                  child: AppAvatar(
-                    pathImage: context.read<AppRepo>().User!.avatar,
                   ),
                 ),
               ),
@@ -154,11 +182,6 @@ class _LocationState extends State<Location> {
             onPressed: _goToCurrentLocation,
             child: Icon(Icons.my_location),
           ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: _openInGoogleMaps,
-            child: Icon(Icons.map),
-          )
         ],
       ),
     );
