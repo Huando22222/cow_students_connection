@@ -72,6 +72,7 @@ class LoginPage extends StatelessWidget {
                   AppTextField(
                     hint: "password",
                     keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
                     onChanged: (value) {
                       context.read<AppRepo>().password = value;
                       password = value;
