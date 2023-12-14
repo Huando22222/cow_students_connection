@@ -172,7 +172,7 @@ class _WelcomePageState extends State<WelcomePage> {
                               .pushReplacementNamed(AppRoutes.main);
                         } else {
                           print(
-                              'Failed to updated profile Status code: ${response.statusCode}');
+                              'Failed to updated profxile Status code: ${response.statusCode}');
                         }
                       } catch (error) {
                         print('Error uploading image: $error');

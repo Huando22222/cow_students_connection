@@ -1,4 +1,5 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
+import 'package:cow_students_connection/pages/chatmessage.dart';
 import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/location.dart';
 import 'package:cow_students_connection/pages/profile.dart';
@@ -29,9 +30,7 @@ class _MainPageState extends State<MainPage> {
       create: (context) => PostProvider(),
       child: HomePage(),
     ),
-    Center(
-      child: Text("Message"),
-    ),
+    ChatScreen(),
     Location(),
     Center(
       child: Text("Notification"),

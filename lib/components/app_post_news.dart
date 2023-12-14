@@ -87,7 +87,7 @@ class _AppPostNewsState extends State<AppPostNews> {
   }
 
   bool canPost() {
-    return content!.isNotEmpty || image != null;
+    return (_contentPost.text.trim().isNotEmpty || image != null);
   }
 
   @override
@@ -104,7 +104,7 @@ class _AppPostNewsState extends State<AppPostNews> {
               child: TextField(
                 controller: _contentPost,
                 onChanged: (value) {
-                  content = value;
+                  setState(() {}); // Trigger a rebuild when text changes
                 },
                 decoration: InputDecoration(hintText: "what's news "),
                 maxLines: null,
@@ -149,24 +149,76 @@ class _AppPostNewsState extends State<AppPostNews> {
               ],
             ),
           ),
-
-        // Hiển thị nút "Đăng bài" chỉ khi có nội dung hoặc hình ảnh
-        AnimatedOpacity(
-          opacity: canPost() ? 1.0 : 0.0,
-          duration: Duration(milliseconds: 500),
-          child: IgnorePointer(
-            ignoring: !canPost(),
-            child: ElevatedButton(
-              onPressed: () {
-                if (canPost()) {
-                  // Call the uploadImages function here
-                  uploadImages(image);
-                }
-              },
-              child: Text("Đăng bài"),
+        Visibility(
+          visible: canPost(),
+          child: AnimatedOpacity(
+            opacity: canPost() ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 500),
+            child: IgnorePointer(
+              ignoring: !canPost(),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromARGB(255, 44, 176, 117),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20),
+                            topLeft: Radius.circular(20)),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (canPost()) {
+                        // Call the uploadImages function here
+                        uploadImages(image);
+                      }
+                    },
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: Text("Đăng bài"),
+                    ),
+                  ),
+                ),
+              ),
             ),
           ),
         ),
+
+        // Hiển thị nút "Đăng bài" chỉ khi có nội dung hoặc hình ảnh
+        // AnimatedOpacity(
+        //   opacity: canPost() ? 1.0 : 0.0,
+        //   duration: Duration(milliseconds: 500),
+        //   child: IgnorePointer(
+        //     ignoring: !canPost(),
+        //     child: Align(
+        //       alignment: Alignment.bottomCenter,
+        //       child: Container(
+        //         child: ElevatedButton(
+        //           style: ElevatedButton.styleFrom(
+        //             primary: Color.fromARGB(255, 44, 176, 117),
+        //             shape: RoundedRectangleBorder(
+        //               borderRadius: BorderRadius.only(
+        //                   bottomRight: Radius.circular(20),
+        //                   topLeft: Radius.circular(20)),
+        //             ),
+        //           ),
+        //           onPressed: () {
+        //             if (canPost()) {
+        //               // Call the uploadImages function here
+        //               uploadImages(image);
+        //             }
+        //           },
+        //           child: Padding(
+        //             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        //             child: Text("Đăng bài"),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }
