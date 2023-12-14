@@ -21,7 +21,7 @@ class AppPosted extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: const EdgeInsets.symmetric(horizontal: 25.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -46,9 +46,12 @@ class AppPosted extends StatelessWidget {
           ),
           // parameters post & user
           if (Post.message != "")
-            Text(
-              Post.message!,
-              style: Post.images != "" ? AppText.subtitle1 : AppText.header2,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0, top: 8.0),
+              child: Text(
+                Post.message!,
+                style: Post.images != "" ? AppText.subtitle1 : AppText.header2,
+              ),
             ),
           if (Post.images != "")
             GestureDetector(

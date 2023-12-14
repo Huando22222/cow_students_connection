@@ -11,24 +11,19 @@ class AppChat extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool samePerson = true;
     return ListView.separated(
       itemBuilder: (context, index) {
         if (messages![index].sender.id == context.read<AppRepo>().User!.id) {
+          samePerson = true;
           return ChatMeItem(chat: messages![index].content);
         } else {
-          return InkWell(
-            onTap: () {
-              print(
-                  "${context.read<AppRepo>().User!.id} - ${messages![index].sender.id}");
-            },
-            child: ChatOtherItem(chat: messages![index].content),
-          );
+          samePerson = false;
+          return ChatOtherItem(chat: messages![index].content);
         }
       },
       separatorBuilder: (BuildContext context, int index) {
-        return SizedBox(
-          height: 20,
-        );
+        return samePerson ? SizedBox(height: 2) : SizedBox(height: 10);
       },
       itemCount: messages!.length,
     );

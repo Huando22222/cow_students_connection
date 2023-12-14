@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
     // }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30),
+      padding: const EdgeInsets.only(top: 30),
       child: RefreshIndicator(
         onRefresh: () => context.read<PostProvider>().fetchPosts(),
         // onRefresh: _refresh,
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(
-                      height: 20,
+                      height: 30,
                     );
                   },
                   itemCount: value.Posts.length,
