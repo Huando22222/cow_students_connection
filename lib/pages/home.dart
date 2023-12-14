@@ -48,15 +48,14 @@ class _HomePageState extends State<HomePage> {
               child: Consumer<PostProvider>(builder: (context, value, child) {
                 return ListView.separated(
                   itemBuilder: (context, index) {
-                    return AppPosted(
-                        Post: context.read<PostProvider>().Posts[index]);
+                    return AppPosted(Post: value.Posts[index]);
                   },
                   separatorBuilder: (BuildContext context, int index) {
                     return SizedBox(
                       height: 20,
                     );
                   },
-                  itemCount: context.read<PostProvider>().Posts.length,
+                  itemCount: value.Posts.length,
                 );
               }),
             ),

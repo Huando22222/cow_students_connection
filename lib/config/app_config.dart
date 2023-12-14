@@ -1,6 +1,7 @@
 class AppConfig {
   //ipconfig ipv4
-  // static const baseUrl = "http://172.16.16.69:3000/"; //public
-  static const baseUrl = "http://172.16.16.152:3000/"; //home
-  // static const baseUrl = "http://10.101.5.90:3000/"; //home
+  static const baseUrl = "http://${baseIp}:3000/";
+  static const baseWs = "ws://${baseIp}:3000/";
+  static const baseIp = "172.16.16.165";
+
 }

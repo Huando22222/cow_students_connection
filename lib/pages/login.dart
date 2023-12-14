@@ -13,6 +13,8 @@ import 'package:cow_students_connection/pages/logged_in_page.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
+import 'package:cow_students_connection/util/socket/socket_client.dart';
+import 'package:cow_students_connection/util/socket/socket_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -63,7 +65,6 @@ class LoginPage extends StatelessWidget {
                     onChanged: (value) {
                       context.read<AppRepo>().phone = value;
                       phone = value;
-                      print("${phone} - ${password}");
                     },
                   ),
                   SizedBox(
@@ -76,7 +77,6 @@ class LoginPage extends StatelessWidget {
                     onChanged: (value) {
                       context.read<AppRepo>().password = value;
                       password = value;
-                      print("${phone} - ${password}");
                     },
                   ),
                   Row(
@@ -104,8 +104,6 @@ class LoginPage extends StatelessWidget {
                     text: "Login",
                     backGroundBtnColor: AppColors.btnLoginColor,
                     onPressed: () async {
-                      print("Current baseUrl: ${AppConfig.baseUrl}");
-                      print("TuanDZ");
                       print(
                           "${context.read<AppRepo>().phone}---------------------Server recieved ACCOUNT :${context.read<AppRepo>().password}--------------------");
                       final response = await http.post(
@@ -118,14 +116,14 @@ class LoginPage extends StatelessWidget {
                       );
 
                       if (response.statusCode == 200) {
-                        print("---------------------Server recieved ACCOUNT");
+                        // SocketClient mySocket = SocketClient.instance;
+                        final SocketMethods _socketMethods = SocketMethods();
+                        _socketMethods.MessageListener(context);
 
                         final responseData = jsonDecode(response.body);
                         final accountData =
                             account.fromJson(responseData['account']);
                         context.read<AppRepo>().Account = accountData;
-                        print(
-                            "${context.read<AppRepo>().phone} ${context.read<AppRepo>().password}");
                         print(
                             "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
                         var userData = responseData['user'];
@@ -140,10 +138,6 @@ class LoginPage extends StatelessWidget {
                         } else {
                           userData = user.fromJson(responseData['user']);
                           context.read<AppRepo>().User = userData;
-                          print(
-                              'updated profile ${context.read<AppRepo>().User!.id} -- ${context.read<AppRepo>().User?.birthDay}\n');
-                          print(
-                              "user data have value ${context.read<AppRepo>().User!.id}");
                           Navigator.of(context).pushNamed(AppRoutes.main);
                         }
                         //neviagave

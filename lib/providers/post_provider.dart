@@ -9,19 +9,15 @@ class PostProvider extends ChangeNotifier {
   //List<post> get posts => Posts;
 
   void addPost(post newPost) {
-    print('test');
     Posts.insert(0, newPost); // Add the new post at the beginning of the list
     notifyListeners();
     // Notify listeners that the data has changed
-    print('test');
-    print('test ${Posts[0].message}');
   }
 
   Future<void> fetchPosts() async {
     print("get refresh");
     List<post> fetchedPosts = [];
     try {
-      print("get try");
       // final response = await http.get(Uri.parse('${AppConfig.baseUrl}post/'));
       // if (response.statusCode == 200) {
       //   print("success fetch: "); //${Posts.length}
@@ -30,7 +26,6 @@ class PostProvider extends ChangeNotifier {
       //       .toList();
       final response = await http.get(Uri.parse('${AppConfig.baseUrl}post/'));
       if (response.statusCode == 200) {
-        print("success fetch: 200 "); //${Posts.length}
         final responseData = jsonDecode(response.body);
         Posts.clear();
         Posts = (responseData["data"] as List)
@@ -41,11 +36,12 @@ class PostProvider extends ChangeNotifier {
         // Posts.clear();
         // Posts.addAll(fetchedPosts);
         // print("${response.body}"); //${Posts.length}
-        for (var post in Posts) {
-          print("Message: ${post.images}");
-          print("Message: ${post.owner!.avatar}");
-          // In ra các thông tin khác của post nếu cần
-        }
+        ////test
+        // for (var post in Posts) {
+        //   print("Message: ${post.images}");
+        //   print("Message: ${post.owner!.avatar}");
+        //   // In ra các thông tin khác của post nếu cần
+        // }
         notifyListeners();
       } else {
         print('Failed to load posts. Status code: ${response.statusCode}');
