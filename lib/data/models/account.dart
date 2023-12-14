@@ -17,11 +17,12 @@ class account {
     this.image,
   );
   factory account.fromJson(Map<String, dynamic> json) => account(
-      json['_id'],
-      json['phone'],
-      json['password'],
-      json['fullname'],
-      json['email'],
-      json['id'],
-      json['image']);
+        json['_id'],
+        json['phone'],
+        json['password'],
+        json['fullname'],
+        json['email'],
+        json['id'],
+        json['image'],
+      );
 }
