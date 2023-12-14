@@ -1,6 +1,9 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
+import 'package:cow_students_connection/pages/chat.dart';
 import 'package:cow_students_connection/pages/home.dart';
+import 'package:cow_students_connection/pages/location.dart';
 import 'package:cow_students_connection/pages/profile.dart';
+import 'package:cow_students_connection/providers/chat_provider.dart';
 import 'package:cow_students_connection/providers/post_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -28,12 +31,12 @@ class _MainPageState extends State<MainPage> {
       create: (context) => PostProvider(),
       child: HomePage(),
     ),
-    Center(
-      child: Text("Message"),
-    ),
-    Center(
-      child: Text("Location"),
-    ),
+    // ChangeNotifierProvider(
+    //   create: (context) => ChatProvider(),
+    //   child: ChatPage(),
+    // ),
+    ChatPage(),
+    Location(),
     Center(
       child: Text("Notification"),
     ),

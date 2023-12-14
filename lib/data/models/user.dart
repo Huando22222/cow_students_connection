@@ -34,4 +34,17 @@ class user {
       json['idAcc'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'firstName': firstName,
+      'lastName': lastName,
+      'gender': gender,
+      'birthDay': birthDay?.toIso8601String(),
+      'avatar': avatar,
+      'phone': phone,
+      'idAcc': idAcc,
+    };
+  }
 }
