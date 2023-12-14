@@ -1,4 +1,6 @@
 import 'package:cow_students_connection/components/app_avatar.dart';
+import 'package:cow_students_connection/components/avatarContainer.dart';
+import 'package:cow_students_connection/components/marker_avatar_location.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +35,6 @@ class _LocationState extends State<Location> {
     _startListeningToLocation();
     _searchController = TextEditingController();
   }
-
-  bool _isListeningToLocation = false;
 
   void _initLocationUpdates() async {
     var status = await Permission.location.status;
@@ -82,43 +82,6 @@ class _LocationState extends State<Location> {
     _searchController.dispose();
     super.dispose();
   }
-
-  // Widget _buildSearchBar() {
-  //   return Padding(
-  //     padding: const EdgeInsets.all(8.0),
-  //     child: TextField(
-  //       controller: _searchController,
-  //       decoration: InputDecoration(
-  //         labelText: 'Search location...',
-  //         suffixIcon: IconButton(
-  //           icon: Icon(Icons.search), onPressed: () {  },
-  //            //_searchLocation,
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-// Xử lý sự kiện tìm kiếm
-// void _searchLocation() async {
-//   String query = _searchController.text;
-//   try {
-//     List<Placemark> placemarks = await locationFromAddress(query);
-//     if (placemarks.isNotEmpty) {
-//       Placemark firstResult = placemarks.first;
-//       setState(() {
-//         currentLocation = LatLng(firstResult.laitude!, firstResult.longitude!);
-//         mapController.move(currentLocation, currentZoom);
-//       });
-//     } else {
-//       // Handle case when no locations are found
-//       print('No locations found for the given query.');
-//     }
-//   } catch (e) {
-//     // Handle any potential exceptions or errors
-//     print('Error occurred: $e');
-//   }
-// }
 
   Future<void> _openInGoogleMaps() async {
     final Uri _url = Uri.parse(
@@ -180,55 +143,13 @@ class _LocationState extends State<Location> {
               ),
             ],
           ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                point: currentLocation!,
-                width: 60,
-                height: 60,
-                rotate: true,
-                child: InkWell(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return Container(
-                          color: Colors.white,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              ListTile(
-                                title: Text(
-                                    'Latitude: ${currentLocation.latitude}'),
-                                subtitle: Text(
-                                    'Longitude: ${currentLocation.longitude}'),
-                              ),
-                              ElevatedButton(
-                                onPressed: _openInGoogleMaps,
-                                child: Text('Open in Google Maps'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          45), // Đảm bảo borderRadius lớn hơn hoặc bằng nửa kích thước
-                      border: Border.all(
-                        color: Colors.lightBlueAccent,
-                        width: 4, // Điều chỉnh độ dày của viền tại đây
-                      ),
-                    ),
-                    child: AppAvatar(
-                      pathImage: context.read<AppRepo>().User!.avatar,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          CustomMarker(
+            point: currentLocation,
+            pathImage: context.read<AppRepo>().User!.avatar!,
+          ),
+          CustomMarker(
+            point: LatLng(10.7994154, 106.7116815),
+            pathImage: context.read<AppRepo>().User!.avatar!,
           ),
         ],
       ),
