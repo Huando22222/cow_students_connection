@@ -72,6 +72,7 @@ class LoginPage extends StatelessWidget {
                   AppTextField(
                     hint: "password",
                     keyboardType: TextInputType.visiblePassword,
+                    obscureText: true,
                     onChanged: (value) {
                       context.read<AppRepo>().password = value;
                       password = value;
@@ -103,6 +104,7 @@ class LoginPage extends StatelessWidget {
                     text: "Login",
                     backGroundBtnColor: AppColors.btnLoginColor,
                     onPressed: () async {
+                      print("Current baseUrl: ${AppConfig.baseUrl}");
                       print("TuanDZ");
                       print(
                           "${context.read<AppRepo>().phone}---------------------Server recieved ACCOUNT :${context.read<AppRepo>().password}--------------------");

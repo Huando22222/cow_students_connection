@@ -5,7 +5,7 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:cow_students_connection/styles/app_colors.dart';
 
-class AppTextField extends StatelessWidget {
+class AppTextField extends StatefulWidget {
   final String? hint;
   final double? sizedWidth;
   final TextInputType? keyboardType;
@@ -14,6 +14,8 @@ class AppTextField extends StatelessWidget {
   final bool? showLabel;
   final Color? colorLabel;
   final TextEditingController? controller;
+  final bool? obscureText; // Thêm thuộc tính này
+
   const AppTextField({
     Key? key,
     this.hint,
@@ -24,32 +26,46 @@ class AppTextField extends StatelessWidget {
     this.showLabel,
     this.colorLabel,
     this.controller,
+    this.obscureText,
   }) : super(key: key);
 
   @override
+  _AppTextFieldState createState() => _AppTextFieldState();
+}
+
+class _AppTextFieldState extends State<AppTextField> {
+  late bool _isObscure; // Sử dụng biến này để lưu trạng thái của mật khẩu
+
+  @override
+  void initState() {
+    super.initState();
+    _isObscure = widget.obscureText ??
+        false; // Thiết lập trạng thái ban đầu từ thuộc tính của widget
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // var screenWidth = MediaQuery.of(context).size.width;
     return SizedBox(
-      width: sizedWidth,
+      width: widget.sizedWidth,
       child: Row(
         children: [
-          if (svgPicture != null)
+          if (widget.svgPicture != null)
             Padding(
               padding: EdgeInsets.only(right: 10),
               child: SvgPicture.asset(
-                svgPicture!,
+                widget.svgPicture!,
                 width: 50,
                 height: 50,
               ),
             ),
           Expanded(
             child: TextField(
-              controller: controller ?? null,
+              controller: widget.controller ?? null,
               decoration: InputDecoration(
-                hintText: hint,
-                labelText: showLabel == false ? null : hint,
+                hintText: widget.hint,
+                labelText: widget.showLabel == false ? null : widget.hint,
                 labelStyle: TextStyle(
-                  color: colorLabel ?? AppColors.labelColor,
+                  color: widget.colorLabel ?? AppColors.labelColor,
                 ),
                 border: UnderlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(12)),
@@ -60,9 +76,26 @@ class AppTextField extends StatelessWidget {
                 ),
                 filled: true,
                 fillColor: AppColors.field,
+                // Sử dụng _isObscure để xác định trạng thái hiện tại của mật khẩu
+                suffixIcon: widget.obscureText != null &&
+                        widget.obscureText == true
+                    ? IconButton(
+                        onPressed: () {
+                          setState(() {
+                            _isObscure = !_isObscure; // Đảo ngược trạng thái
+                          });
+                        },
+                        icon: Icon(
+                          _isObscure ? Icons.visibility : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                      )
+                    : null,
               ),
-              keyboardType: keyboardType ?? TextInputType.text,
-              onChanged: onChanged ?? null,
+              keyboardType: widget.keyboardType ?? TextInputType.text,
+              onChanged: widget.onChanged ?? null,
+              // Sử dụng _isObscure để ẩn/hiện mật khẩu
+              obscureText: _isObscure,
             ),
           ),
         ],

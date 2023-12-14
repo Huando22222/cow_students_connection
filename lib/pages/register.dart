@@ -137,29 +137,41 @@ class _RegisterState extends State<Register> {
                     // backGroundBtnColor: isConfirmed && isAllFieldsFilled
                     //     ? AppColors.btnLoginColor
                     //     : AppColors.btnLoginColor,
+
+                    // print("${countrycode.text}"); //null??
+                    // print("${phone}");
+
                     onPressed: () async {
-                      // print("${countrycode.text}"); //null??
-                      // print("${phone}");
-
-                      await FirebaseAuth.instance.verifyPhoneNumber(
-                        // phoneNumber: '+44 7123 123 456',
-                        phoneNumber: '+84  ${phone}',
-                        // phoneNumber: '${countrycode.text + phone}',
-                        verificationCompleted:
-                            (PhoneAuthCredential credential) {},
-                        verificationFailed: (FirebaseAuthException e) {},
-                        codeSent: (String verificationId, int? resendToken) {
-                          Register.verify = verificationId;
-                          Navigator.of(context).pushNamed(AppRoutes.otp);
-                        },
-                        codeAutoRetrievalTimeout: (String verificationId) {},
-                      );
-
-                      // if (isConfirmed && isAllFieldsFilled) {
-                      //   Navigator.of(context)
-                      //       .pushReplacementNamed(AppRoutes.login);
-                      // }
+                      if (phone!.length != 10 ||
+                          int.tryParse(phone!) == null ||
+                          password!.length < 8) {
+                        // Show error message for invalid phone number or password length
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Phone number and password must be at least 8 characters.',
+                            ),
+                          ),
+                        );
+                      } else {
+                        await FirebaseAuth.instance.verifyPhoneNumber(
+                          phoneNumber: '+84 $phone',
+                          verificationCompleted:
+                              (PhoneAuthCredential credential) {},
+                          verificationFailed: (FirebaseAuthException e) {},
+                          codeSent: (String verificationId, int? resendToken) {
+                            Register.verify = verificationId;
+                            Navigator.of(context).pushNamed(AppRoutes.otp);
+                          },
+                          codeAutoRetrievalTimeout: (String verificationId) {},
+                        );
+                      }
                     },
+
+                    // if (isConfirmed && isAllFieldsFilled) {
+                    //   Navigator.of(context)
+                    //       .pushReplacementNamed(AppRoutes.login);
+                    // }
                   ),
                   Spacer(),
                   Spacer(),

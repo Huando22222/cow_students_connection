@@ -21,17 +21,15 @@ class user {
 
   factory user.fromJson(Map<String, dynamic> json) {
     return user(
-      json['_id'],
-      json['firstName'],
-      json['lastName'],
-      json['gender'], // Có thể cần xử lý tùy thuộc vào dữ liệu thực tế
+      json['_id'] as String?, // Chuyển đổi kiểu dữ liệu
+      json['firstName'] as String?,
+      json['lastName'] as String?,
+      json['gender']
+          as String?, // Có thể cần xử lý tùy thuộc vào dữ liệu thực tế
       json['birthDay'] != null ? DateTime.parse(json['birthDay']) : null,
-      // json['birthDay'] != null && json['birthDay'] is String
-      //     ? DateTime.parse(json['birthDay'])
-      //     : json['birthDay'],
-      json['avatar'],
-      json['phone'],
-      json['idAcc'],
+      json['avatar'] as String?,
+      json['phone'] as String?,
+      json['idAcc'] as String? ?? '',
     );
   }
 }

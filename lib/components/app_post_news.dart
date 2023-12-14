@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/data/models/post.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
+import 'package:cow_students_connection/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -19,8 +23,7 @@ class AppPostNews extends StatefulWidget {
 class _AppPostNewsState extends State<AppPostNews> {
   File? image;
   TextEditingController _contentPost = TextEditingController();
-  bool isContentNotEmpty = false;
-
+  String? content = "";
   Future pickImage(ImageSource source) async {
     try {
       final image = await ImagePicker().pickImage(source: source);
@@ -63,6 +66,12 @@ class _AppPostNewsState extends State<AppPostNews> {
 
       if (response.statusCode == 200) {
         print('Post uploaded successfully');
+        final responseData = jsonDecode(response.body);
+        post newPost = post.fromJson(responseData['post']);
+        context.read<PostProvider>().addPost(newPost);
+        removeImage();
+        _contentPost.text = "";
+        print('Fname ${newPost.message}');
       } else {
         print('Failed to upload post. Status code: ${response.statusCode}');
       }
@@ -77,6 +86,10 @@ class _AppPostNewsState extends State<AppPostNews> {
     });
   }
 
+  bool canPost() {
+    return (_contentPost.text.trim().isNotEmpty || image != null);
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -85,17 +98,16 @@ class _AppPostNewsState extends State<AppPostNews> {
       children: [
         Row(
           children: [
-            AppAvatar(),
+            AppAvatar(pathImage: context.read<AppRepo>().User!.avatar),
+            SizedBox(width: 10),
             Expanded(
               child: TextField(
                 controller: _contentPost,
+                onChanged: (value) {
+                  setState(() {}); // Trigger a rebuild when text changes
+                },
                 decoration: InputDecoration(hintText: "what's news "),
                 maxLines: null,
-                onChanged: (content) {
-                  setState(() {
-                    isContentNotEmpty = content.isNotEmpty;
-                  });
-                },
               ),
             ),
             InkWell(
@@ -137,26 +149,76 @@ class _AppPostNewsState extends State<AppPostNews> {
               ],
             ),
           ),
+        Visibility(
+          visible: canPost(),
+          child: AnimatedOpacity(
+            opacity: canPost() ? 1.0 : 0.0,
+            duration: Duration(milliseconds: 500),
+            child: IgnorePointer(
+              ignoring: !canPost(),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary: Color.fromARGB(255, 44, 176, 117),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(20),
+                            topLeft: Radius.circular(20)),
+                      ),
+                    ),
+                    onPressed: () {
+                      if (canPost()) {
+                        // Call the uploadImages function here
+                        uploadImages(image);
+                      }
+                    },
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: Text("Đăng bài"),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
 
         // Hiển thị nút "Đăng bài" chỉ khi có nội dung hoặc hình ảnh
-        if (isContentNotEmpty || image != null)
-          ElevatedButton(
-            onPressed: () {
-              // Call the uploadImages function here
-
-              {
-                // Call the uploadImages function here
-                uploadImages(image);
-              }
-
-              //else {
-              //   // Handle case when content or image is empty
-              //   print("Content or image is empty");
-              // }
-              print('hihihi ${image}');
-            },
-            child: Text("Đăng bài"),
-          ),
+        // AnimatedOpacity(
+        //   opacity: canPost() ? 1.0 : 0.0,
+        //   duration: Duration(milliseconds: 500),
+        //   child: IgnorePointer(
+        //     ignoring: !canPost(),
+        //     child: Align(
+        //       alignment: Alignment.bottomCenter,
+        //       child: Container(
+        //         child: ElevatedButton(
+        //           style: ElevatedButton.styleFrom(
+        //             primary: Color.fromARGB(255, 44, 176, 117),
+        //             shape: RoundedRectangleBorder(
+        //               borderRadius: BorderRadius.only(
+        //                   bottomRight: Radius.circular(20),
+        //                   topLeft: Radius.circular(20)),
+        //             ),
+        //           ),
+        //           onPressed: () {
+        //             if (canPost()) {
+        //               // Call the uploadImages function here
+        //               uploadImages(image);
+        //             }
+        //           },
+        //           child: Padding(
+        //             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        //             child: Text("Đăng bài"),
+        //           ),
+        //         ),
+        //       ),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

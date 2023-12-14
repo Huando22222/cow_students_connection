@@ -6,6 +6,16 @@ import 'package:cow_students_connection/data/models/post.dart';
 
 class PostProvider extends ChangeNotifier {
   List<post> Posts = [];
+  //List<post> get posts => Posts;
+
+  void addPost(post newPost) {
+    print('test');
+    Posts.insert(0, newPost); // Add the new post at the beginning of the list
+    notifyListeners();
+    // Notify listeners that the data has changed
+    print('test');
+    print('test ${Posts[0].message}');
+  }
 
   Future<void> fetchPosts() async {
     print("get refresh");

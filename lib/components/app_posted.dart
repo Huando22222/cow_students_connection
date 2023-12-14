@@ -1,3 +1,4 @@
+import 'package:cow_students_connection/components/ZoomedImageDialog.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/post.dart';
@@ -27,7 +28,10 @@ class AppPosted extends StatelessWidget {
           Row(
             children: [
               // AppAvatar(pathImage: Post.owner!.avatar),
-              AppAvatar(),
+              AppAvatar(
+                pathImage: Post.owner!.avatar,
+              ),
+              SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -47,17 +51,43 @@ class AppPosted extends StatelessWidget {
               style: Post.images != "" ? AppText.subtitle1 : AppText.header2,
             ),
           if (Post.images != "")
-            SizedBox(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(5),
-                child: Image.network(
-                  "${AppConfig.baseUrl}images/${Post.images}",
-                  height: 250,
-                  width: 350,
-                  fit: BoxFit.cover,
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return ZoomedImageScreen(
+                      imageUrl: "${AppConfig.baseUrl}images/${Post.images}",
+                      onClose: () {
+                        Navigator.of(context).pop(); // Đóng màn hình phóng to
+                      },
+                    );
+                  },
+                ));
+              },
+              child: SizedBox(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(5),
+                  child: Image.network(
+                    "${AppConfig.baseUrl}images/${Post.images}",
+                    height: 250,
+                    width: 350,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
+
+          // SizedBox(
+          //   child: ClipRRect(
+          //     borderRadius: BorderRadius.circular(5),
+          //     child: Image.network(
+          //       "${AppConfig.baseUrl}images/${Post.images}",
+          //       height: 250,
+          //       width: 350,
+          //       fit: BoxFit.cover,
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );
