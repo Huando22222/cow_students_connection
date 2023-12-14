@@ -65,15 +65,6 @@ class ChatPage extends StatelessWidget {
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                // ChatProvider().addMessage("data");
-                // final SocketMethods _socketMethods = SocketMethods();
-                // _socketMethods.Send("test from flutter app");
-                // context.read<ChatProvider>().addMessage("message");
-              },
-              child: Text("test from flutter app"),
-            ),
           ],
         ),
       ),

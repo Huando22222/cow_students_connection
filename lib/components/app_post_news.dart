@@ -122,9 +122,9 @@ class _AppPostNewsState extends State<AppPostNews> {
             ),
           ],
         ),
-        SizedBox(
-          height: 20,
-        ),
+        // SizedBox(
+        //   height: 20,
+        // ),
         if (image != null)
           GestureDetector(
             onTap: () {
