@@ -144,12 +144,20 @@ class LoginPage extends StatelessWidget {
                               'updated profile ${context.read<AppRepo>().User!.id} -- ${context.read<AppRepo>().User?.birthDay}\n');
                           print(
                               "user data have value ${context.read<AppRepo>().User!.id}");
+
                           Navigator.of(context).pushNamed(AppRoutes.main);
                         }
                         //neviagave
                       } else {
                         print(
                             'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              'Incorrect phone number or password. Please try again.',
+                            ),
+                          ),
+                        );
                       }
 
                       // Navigator.of(context).pushNamed(AppRoutes.main);
