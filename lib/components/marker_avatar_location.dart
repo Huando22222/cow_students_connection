@@ -1,6 +1,7 @@
 import 'package:cow_students_connection/components/app_newpost_location.dart';
 import 'package:cow_students_connection/components/app_posted_location.dart';
 import 'package:cow_students_connection/components/app_user_profileInfo.dart';
+import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -12,10 +13,12 @@ class MarkerAvatarLocation extends StatelessWidget {
   final LatLng point;
   final user userProfile;
   final String mess;
+  final List<postLocation> postLocations;
   const MarkerAvatarLocation({
     required this.point,
     required this.userProfile,
     required this.mess,
+    required this.postLocations,
   });
 
   void _showUserProfile(BuildContext context) {
@@ -33,32 +36,37 @@ class MarkerAvatarLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MarkerLayer(
-      markers: [
-        Marker(
-          point: point,
-          width: 60,
-          height: 60,
-          rotate: true,
-          child: InkWell(
-            onTap: () {
-              _showUserProfile(context);
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(45),
-                border: Border.all(
-                  color: Colors.lightBlueAccent,
-                  width: 4,
-                ),
+    List<Marker> markers = postLocations.map((postLocation) {
+      return Marker(
+        point: LatLng(
+          postLocation.location!.latitude,
+          postLocation.location!.longitude,
+        ),
+        width: 60,
+        height: 60,
+        rotate: true,
+        child: InkWell(
+          onTap: () {
+            _showUserProfile(context);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(45),
+              border: Border.all(
+                color: Colors.lightBlueAccent,
+                width: 4,
               ),
-              child: AppAvatar(
-                pathImage: userProfile.avatar,
-              ),
+            ),
+            child: AppAvatar(
+              pathImage: postLocation.owner!.avatar,
             ),
           ),
         ),
-      ],
+      );
+    }).toList();
+
+    return MarkerLayer(
+      markers: markers,
     );
   }
 }

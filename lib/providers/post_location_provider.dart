@@ -11,10 +11,10 @@ class PostLocationProvider extends ChangeNotifier {
   List<postLocation> PostLocations = [];
   //List<post> get posts => Posts;
 
-  void addPostlocation(postLocation newPost) {
-    PostLocations.insert(0, newPost);
-    notifyListeners();
-  }
+  // void addPostlocation(postLocation newPost) {
+  //   PostLocations.insert(0, newPost);
+  //   notifyListeners();
+  // }
 
   Future<void> fetchPosts() async {
     print("get refresh location");
@@ -28,7 +28,7 @@ class PostLocationProvider extends ChangeNotifier {
         PostLocations = (responseData["data"] as List)
             .map((data) => postLocation.fromJson(data))
             .toList();
-        print("pót lengh: ${PostLocations.length}");
+        print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
 
         notifyListeners();
       } else {

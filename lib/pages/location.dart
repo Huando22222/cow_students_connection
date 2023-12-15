@@ -149,18 +149,32 @@ class _LocationState extends State<Location> {
               ),
             ],
           ),
-          // Consumer<PostLocationProvider>( builder: (context, value, child){
-          //   return  MarkerAvatarLocation(
-          //     userProfile: userProfile!,
-          //     point: currentLocation,
-          //     mess: mess,
-          //   );
-          // }),
+
+          // Expanded(
+          //   child: Consumer<PostLocationProvider>(
+          //       builder: (context, value, child) {
+          //     return ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         LatLng tempPoint = LatLng(
+          //             value.PostLocations[index].location!.latitude,
+          //             value.PostLocations[index].location!.longitude);
+          //         return MarkerAvatarLocation(
+          //           userProfile: value.PostLocations[index].owner!,
+          //           point: tempPoint,
+          //           mess: value.PostLocations[index].message!,
+          //         );
+          //       },
+          //       itemCount: value.PostLocations.length,
+          //     );
+          //   }),
+          // ),
+
           if (showLocationOptions)
             MarkerAvatarLocation(
               userProfile: userProfile!,
               point: currentLocation,
               mess: mess,
+              postLocations: context.read<PostLocationProvider>().PostLocations,
             ),
           // Other FlutterMap children
         ],
