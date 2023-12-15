@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:intl/intl.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/user.dart';
@@ -68,7 +67,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Ảnh bìa
                 Container(
                   width: double.infinity,
-                  height: 200, // Điều chỉnh chiều cao của ảnh bìa tại đây
+                  height: 200,
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: NetworkImage(
@@ -77,14 +76,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     ),
                   ),
                 ),
-                // Avatar
                 Positioned(
-                  top: 120, // Điều chỉnh vị trí theo chiều dọc tại đây
-                  left: MediaQuery.of(context).size.width / 2 -
-                      190, // Điều chỉnh vị trí theo chiều ngang tại đây
+                  top: 120,
+                  left: MediaQuery.of(context).size.width / 2 - 190,
                   child: CircleAvatar(
                     radius: 80,
-                    //   backgroundImage: NetworkImage(userProfile!.avatar),
                     child: AppAvatar(
                       pathImage: context.read<AppRepo>().User!.avatar,
                       size: 1000,
@@ -97,10 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Profile Picture
-
                       SizedBox(height: 250),
-                      // Name
                       Row(
                         children: [
                           Text(
@@ -118,15 +111,13 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                         ],
                       ),
-
                       Text(
                         'Insert Bio Here',
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                         ),
                       ),
-                      Divider(), // A line to separate sections
-                      // More details about the user
+                      Divider(),
                       ListTile(
                         leading: Icon(Icons.person_rounded),
                         title: Text('Gender'),
@@ -178,9 +169,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           ],
                         ),
                       ),
-                      // Add more ListTile widgets for additional details
-
-                      // You can add a Friends List, Posts, or other sections related to a Facebook profile
                     ],
                   ),
                 ),
