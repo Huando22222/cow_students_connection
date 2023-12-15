@@ -133,12 +133,12 @@ class AppNewPostLocation extends StatelessWidget {
                               cancelBtnText: 'No',
                               confirmBtnColor: Colors.green,
                               onConfirmBtnTap: () {
-                                if (context
-                                        .read<PostLocationProvider>()
-                                        .isPosted ==
-                                    false) {
-                                  uploadPostLocation();
-                                }
+                                // if (context
+                                //         .read<PostLocationProvider>()
+                                //         .isPosted ==
+                                //     false) {
+                                uploadPostLocation();
+                                //}
                               },
                             );
                           },

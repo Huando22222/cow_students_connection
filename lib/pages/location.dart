@@ -36,11 +36,13 @@ class _LocationState extends State<Location> {
   String mess = 'mess';
   @override
   void initState() {
+    context.read<PostLocationProvider>().fetchPosts(context);
     super.initState();
     userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
     _startListeningToLocation(context);
     _searchController = TextEditingController();
+    // var isPosted = tr
   }
 
   void _initLocationUpdates() async {
@@ -141,10 +143,6 @@ class _LocationState extends State<Location> {
         children: [
           Column(
             children: [
-              // SizedBox(
-              //   height: 200,
-              //   //  child: _buildSearchBar(),
-              // ),
               Expanded(
                 child: TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -153,31 +151,6 @@ class _LocationState extends State<Location> {
               ),
             ],
           ),
-
-          // Expanded(
-          //   child: Consumer<PostLocationProvider>(
-          //       builder: (context, value, child) {
-          //     return ListView.builder(
-          //       itemBuilder: (context, index) {
-          //         LatLng tempPoint = LatLng(
-          //             value.PostLocations[index].location!.latitude,
-          //             value.PostLocations[index].location!.longitude);
-          //         return MarkerAvatarLocation(
-          //           userProfile: value.PostLocations[index].owner!,
-          //           point: tempPoint,
-          //           mess: value.PostLocations[index].message!,
-          //         );
-          //       },
-          //       itemCount: value.PostLocations.length,
-          //     );
-          //   }),
-          // ),
-
-          // MarkerAvatarLocation(
-          //   userProfile: userProfile!,
-          //   point: LatLng(10.56451, 101.656),
-          //   mess: mess,
-          // ),
 
           MarkerAvatarLocation(
             postLocations: context.read<PostLocationProvider>().PostLocations,
@@ -189,8 +162,9 @@ class _LocationState extends State<Location> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (context.read<PostLocationProvider>().isPosted == false)
-            FloatingActionButton(
+          Visibility(
+            visible: context.watch<PostLocationProvider>().isPosted == false,
+            child: FloatingActionButton(
               onPressed: () {
                 showModalBottomSheet(
                   context: context,
@@ -204,6 +178,7 @@ class _LocationState extends State<Location> {
               },
               child: Icon(Icons.add_location),
             ),
+          ),
           SizedBox(width: 10),
           showLocationOptions
               ? Column(

@@ -12,17 +12,9 @@ import 'package:provider/provider.dart';
 class PostLocationProvider extends ChangeNotifier {
   List<postLocation> PostLocations = [];
   bool isPosted = false;
-  //List<post> get posts => Posts;
-
-  // void addPostlocation(postLocation newPost) {
-  //   PostLocations.insert(0, newPost);
-  //   notifyListeners();
-  // }
 
   Future<void> fetchPosts(BuildContext context) async {
     print("get refresh location");
-
-    // List<postLocation> fetchedPosts = [];
     try {
       final response =
           await http.get(Uri.parse('${AppConfig.baseUrl}post-location/'));
@@ -33,12 +25,15 @@ class PostLocationProvider extends ChangeNotifier {
             .map((data) => postLocation.fromJson(data))
             .toList();
         print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
-
+        print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
         if (PostLocations.any((location) =>
             location.owner!.id == context.read<AppRepo>().User!.id)) {
           isPosted = true;
           print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
+        } else {
+          isPosted = false;
         }
+
         notifyListeners();
       } else {
         print('Failed to load posts. Status code: ${response.statusCode}');

@@ -3,6 +3,8 @@ import 'dart:io';
 
 import 'package:cow_students_connection/components/app_text_field.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/pages/location.dart';
+import 'package:cow_students_connection/providers/post_location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
@@ -41,7 +43,7 @@ class AppPostedLocation extends StatelessWidget {
 
   void deletePost(BuildContext context) async {
     try {
-      // Replace 'your_node_server_url' with your actual Node.js server URL
+      // Xóa post
       var response = await http.post(
         Uri.parse('${AppConfig.baseUrl}post-location/delete'),
         body: {'postId': postId},
@@ -50,13 +52,12 @@ class AppPostedLocation extends StatelessWidget {
       if (response.statusCode == 200) {
         Navigator.pop(context);
         Navigator.pop(context);
-        // Successful deletion
-        // Handle any UI changes or notifications here
+        // Quay lại trang Location để cập nhật UI
       } else {
-        // Handle error responses
+        // Xử lý lỗi khi xóa không thành công
       }
     } catch (error) {
-      // Handle exceptions
+      // Xử lý exception khi xóa bị lỗi
     }
   }
 
