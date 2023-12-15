@@ -10,23 +10,18 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
 
 class MarkerAvatarLocation extends StatelessWidget {
-  final LatLng point;
-  final user userProfile;
-  final String mess;
   final List<postLocation> postLocations;
   const MarkerAvatarLocation({
-    required this.point,
-    required this.userProfile,
-    required this.mess,
     required this.postLocations,
   });
 
-  void _showUserProfile(BuildContext context) {
+  void _showUserProfile(
+      BuildContext context, user user, LatLng point, String mess) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return AppPostedLocation(
-          userProfile: userProfile,
+          userProfile: user,
           point: point,
           mess: mess,
         );
@@ -47,7 +42,26 @@ class MarkerAvatarLocation extends StatelessWidget {
         rotate: true,
         child: InkWell(
           onTap: () {
-            _showUserProfile(context);
+            showModalBottomSheet(
+              context: context,
+              builder: (BuildContext context) {
+                return AppPostedLocation(
+                  userProfile: postLocation.owner!,
+                  point: LatLng(
+                    postLocation.location!.latitude,
+                    postLocation.location!.longitude,
+                  ),
+                  mess: postLocation.message!,
+                );
+              },
+            );
+            // _showUserProfile(
+            //   context,
+            //   postLocation.owner,
+            //   LatLng(postLocation.location!.latitude,
+            //       postLocation.location!.longitude),
+            //   postLocation.message,
+            // );
           },
           child: Container(
             decoration: BoxDecoration(
