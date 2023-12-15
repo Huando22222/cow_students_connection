@@ -84,6 +84,10 @@ class AppPostedLocation extends StatelessWidget {
                         _openInGoogleMaps(point.latitude, point.longitude);
                       },
                     ),
+                    IconButton(
+                      icon: Icon(Icons.delete),
+                      onPressed: () {},
+                    ),
                   ],
                 )
               ],
@@ -115,7 +119,7 @@ class AppPostedLocation extends StatelessWidget {
                             IconButton(
                               icon: Icon(Icons.call),
                               onPressed: () {
-                                callPhoneNumber('${userProfile!.phone!}');
+                                callPhoneNumber('${userProfile.phone!}');
                               },
                             ),
                           ],

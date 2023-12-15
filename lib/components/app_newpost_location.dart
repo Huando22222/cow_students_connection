@@ -27,13 +27,10 @@ class AppNewPostLocation extends StatelessWidget {
   final user userProfile;
   final LatLng point;
 
-  final Function(bool) toggleLocationOptions;
-
   const AppNewPostLocation({
     Key? key,
     required this.userProfile,
     required this.point,
-    required this.toggleLocationOptions,
   }) : super(key: key);
 
   Future<void> _openInGoogleMaps(double latitude, double longitude) async {
@@ -126,7 +123,6 @@ class AppNewPostLocation extends StatelessWidget {
                             uploadPostLocation();
 
                             Navigator.pop(context);
-                            toggleLocationOptions(true);
                           },
                           child: Icon(Icons.rocket_launch)),
                     ],
