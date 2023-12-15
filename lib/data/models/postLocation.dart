@@ -4,10 +4,10 @@ class Coordinates {
   final double latitude;
   final double longitude;
 
-  Coordinates(this.latitude, this.longitude);
+  Coordinates.LatLng(this.latitude, this.longitude);
 
   factory Coordinates.fromJson(Map<String, dynamic> json) {
-    return Coordinates(json['latitude'], json['longitude']);
+    return Coordinates.LatLng(json['latitude'], json['longitude']);
   }
 }
 
