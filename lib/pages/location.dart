@@ -179,9 +179,6 @@ class _LocationState extends State<Location> {
           // ),
           if (showLocationOptions)
             MarkerAvatarLocation(
-              userProfile: userProfile!,
-              point: currentLocation,
-              mess: mess,
               postLocations: context.read<PostLocationProvider>().PostLocations,
             ),
           // Other FlutterMap children
