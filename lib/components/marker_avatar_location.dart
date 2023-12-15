@@ -1,80 +1,72 @@
+import 'package:cow_students_connection/components/app_newpost_location.dart';
+import 'package:cow_students_connection/components/app_posted_location.dart';
+import 'package:cow_students_connection/components/app_user_profileInfo.dart';
+import 'package:cow_students_connection/data/models/postLocation.dart';
+import 'package:cow_students_connection/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
 
-class CustomMarker extends StatelessWidget {
+class MarkerAvatarLocation extends StatelessWidget {
   final LatLng point;
-  final String pathImage;
-
-  const CustomMarker({
+  final user userProfile;
+  final String mess;
+  final List<postLocation> postLocations;
+  const MarkerAvatarLocation({
     required this.point,
-    required this.pathImage,
+    required this.userProfile,
+    required this.mess,
+    required this.postLocations,
   });
 
-  Future<void> _openInGoogleMaps(double latitude, double longitude) async {
-    final Uri _url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
-
-    if (!await canLaunch(_url.toString())) {
-      throw Exception('Could not launch $_url');
-    } else {
-      await launch(_url.toString());
-    }
+  void _showUserProfile(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return AppPostedLocation(
+          userProfile: userProfile,
+          point: point,
+          mess: mess,
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return MarkerLayer(
-      markers: [
-        Marker(
-          point: point!,
-          width: 60,
-          height: 60,
-          rotate: true,
-          child: InkWell(
-            onTap: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return Container(
-                    color: Colors.white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        ListTile(
-                          title: Text('Latitude: ${point.latitude}'),
-                          subtitle: Text('Longitude: ${point.longitude}'),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => _openInGoogleMaps(
-                            point.latitude,
-                            point.longitude,
-                          ),
-                          child: Text('Open in Google Maps'),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(45),
-                border: Border.all(
-                  color: Colors.lightBlueAccent,
-                  width: 4,
-                ),
+    List<Marker> markers = postLocations.map((postLocation) {
+      return Marker(
+        point: LatLng(
+          postLocation.location!.latitude,
+          postLocation.location!.longitude,
+        ),
+        width: 60,
+        height: 60,
+        rotate: true,
+        child: InkWell(
+          onTap: () {
+            _showUserProfile(context);
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(45),
+              border: Border.all(
+                color: Colors.lightBlueAccent,
+                width: 4,
               ),
-              child: AppAvatar(
-                pathImage: pathImage,
-              ),
+            ),
+            child: AppAvatar(
+              pathImage: postLocation.owner!.avatar,
             ),
           ),
         ),
-      ],
+      );
+    }).toList();
+
+    return MarkerLayer(
+      markers: markers,
     );
   }
 }

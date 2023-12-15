@@ -1,8 +1,12 @@
 import 'package:cow_students_connection/components/app_avatar.dart';
+import 'package:cow_students_connection/components/app_newpost_location.dart';
+import 'package:cow_students_connection/components/app_posted_location.dart';
 import 'package:cow_students_connection/components/avatarContainer.dart';
 import 'package:cow_students_connection/components/marker_avatar_location.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
+import 'package:cow_students_connection/providers/post_location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -27,12 +31,14 @@ class _LocationState extends State<Location> {
   LatLng currentLocation = LatLng(0.0, 0.0); // Default location
   late TextEditingController _searchController;
   double currentZoom = 13.0;
-
+  user? userProfile;
+  String mess = 'mess';
   @override
   void initState() {
     super.initState();
+    userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
-    _startListeningToLocation();
+    _startListeningToLocation(context);
     _searchController = TextEditingController();
   }
 
@@ -41,12 +47,12 @@ class _LocationState extends State<Location> {
 
     if (!status.isGranted) {
       if (await Permission.location.request().isGranted) {
-        _startListeningToLocation();
+        _startListeningToLocation(context);
         _getCurrentLocation();
       }
     } else {
       _getCurrentLocation();
-      _startListeningToLocation();
+      _startListeningToLocation(context);
     }
   }
 
@@ -61,7 +67,7 @@ class _LocationState extends State<Location> {
     mapController.move(currentLocation, currentZoom);
   }
 
-  void _startListeningToLocation() {
+  void _startListeningToLocation(BuildContext context) {
     _positionStream
         ?.cancel(); // Hủy đăng ký lắng nghe vị trí trước khi bắt đầu mới
 
@@ -73,6 +79,8 @@ class _LocationState extends State<Location> {
           currentLocation = LatLng(position.latitude, position.longitude);
         });
       }
+      ////////////
+      context.read<PostLocationProvider>().fetchPosts();
     });
   }
 
@@ -119,22 +127,20 @@ class _LocationState extends State<Location> {
         .rotate(0.0); // 0.0 represents the angle in radians, adjust as needed
   }
 
+  void _postLocation() {}
+  bool showLocationOptions = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FlutterMap(
         mapController: mapController,
         options: MapOptions(
-          initialCenter: currentLocation!,
+          initialCenter: currentLocation,
           initialZoom: currentZoom,
         ),
         children: [
           Column(
             children: [
-              // SizedBox(
-              //   height: 200,
-              //   //  child: _buildSearchBar(),
-              // ),
               Expanded(
                 child: TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -143,36 +149,89 @@ class _LocationState extends State<Location> {
               ),
             ],
           ),
-          CustomMarker(
-            point: currentLocation,
-            pathImage: context.read<AppRepo>().User!.avatar!,
-          ),
-          CustomMarker(
-            point: LatLng(10.7994154, 106.7116815),
-            pathImage: context.read<AppRepo>().User!.avatar!,
-          ),
+
+          // Expanded(
+          //   child: Consumer<PostLocationProvider>(
+          //       builder: (context, value, child) {
+          //     return ListView.builder(
+          //       itemBuilder: (context, index) {
+          //         LatLng tempPoint = LatLng(
+          //             value.PostLocations[index].location!.latitude,
+          //             value.PostLocations[index].location!.longitude);
+          //         return MarkerAvatarLocation(
+          //           userProfile: value.PostLocations[index].owner!,
+          //           point: tempPoint,
+          //           mess: value.PostLocations[index].message!,
+          //         );
+          //       },
+          //       itemCount: value.PostLocations.length,
+          //     );
+          //   }),
+          // ),
+
+          if (showLocationOptions)
+            MarkerAvatarLocation(
+              userProfile: userProfile!,
+              point: currentLocation,
+              mess: mess,
+              postLocations: context.read<PostLocationProvider>().PostLocations,
+            ),
+          // Other FlutterMap children
         ],
       ),
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            onPressed: _zoomIn,
-            child: Icon(Icons.add),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: _zoomOut,
-            child: Icon(Icons.remove),
-          ),
-          SizedBox(height: 10),
-          FloatingActionButton(
-            onPressed: _goToCurrentLocation,
-            child: Icon(Icons.my_location),
-          ),
-        ],
-      ),
+      floatingActionButton: showLocationOptions
+          ? Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                FloatingActionButton(
+                  onPressed: _zoomIn,
+                  child: Icon(Icons.add),
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  onPressed: _zoomOut,
+                  child: Icon(Icons.remove),
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  onPressed: _goToCurrentLocation,
+                  child: Icon(Icons.my_location),
+                ),
+                SizedBox(height: 10),
+                FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      showLocationOptions = false;
+                    });
+                  },
+                  child: Icon(Icons.close),
+                ),
+              ],
+            )
+          : FloatingActionButton(
+              onPressed: () {
+                // setState(() {
+                //   showLocationOptions = true;
+                // });
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AppNewPostLocation(
+                      userProfile: userProfile!,
+                      point: currentLocation,
+                      toggleLocationOptions: (bool showOptions) {
+                        setState(() {
+                          showLocationOptions =
+                              showOptions; // Update showLocationOptions
+                        });
+                      },
+                    );
+                  },
+                );
+              },
+              child: Icon(Icons.add_box),
+            ),
     );
   }
 }

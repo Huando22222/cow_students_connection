@@ -1,5 +1,6 @@
 import 'package:cow_students_connection/components/ZoomedImageDialog.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
+import 'package:cow_students_connection/components/app_user_profileInfo.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/post.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
@@ -29,6 +30,13 @@ class AppPosted extends StatelessWidget {
             children: [
               // AppAvatar(pathImage: Post.owner!.avatar),
               AppAvatar(
+                onImagePicked: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              UserProfileInfo(userProfile: Post.owner!)));
+                },
                 pathImage: Post.owner!.avatar,
               ),
               SizedBox(width: 10),
