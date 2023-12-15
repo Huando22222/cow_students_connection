@@ -1,14 +1,17 @@
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cow_students_connection/data/models/post.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class PostLocationProvider extends ChangeNotifier {
   List<postLocation> PostLocations = [];
+  bool isPosted = false;
   //List<post> get posts => Posts;
 
   // void addPostlocation(postLocation newPost) {
@@ -16,8 +19,9 @@ class PostLocationProvider extends ChangeNotifier {
   //   notifyListeners();
   // }
 
-  Future<void> fetchPosts() async {
+  Future<void> fetchPosts(BuildContext context) async {
     print("get refresh location");
+
     // List<postLocation> fetchedPosts = [];
     try {
       final response =
@@ -30,6 +34,11 @@ class PostLocationProvider extends ChangeNotifier {
             .toList();
         print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
 
+        if (PostLocations.any((location) =>
+            location.owner!.id == context.read<AppRepo>().User!.id)) {
+          isPosted = true;
+          print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
+        }
         notifyListeners();
       } else {
         print('Failed to load posts. Status code: ${response.statusCode}');

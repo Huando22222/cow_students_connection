@@ -80,7 +80,7 @@ class _LocationState extends State<Location> {
         });
       }
       ////////////
-      context.read<PostLocationProvider>().fetchPosts();
+      context.read<PostLocationProvider>().fetchPosts(context);
     });
   }
 
@@ -189,20 +189,21 @@ class _LocationState extends State<Location> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          FloatingActionButton(
-            onPressed: () {
-              showModalBottomSheet(
-                context: context,
-                builder: (BuildContext context) {
-                  return AppNewPostLocation(
-                    userProfile: userProfile!,
-                    point: currentLocation,
-                  );
-                },
-              );
-            },
-            child: Icon(Icons.add_location),
-          ),
+          if (context.read<PostLocationProvider>().isPosted == false)
+            FloatingActionButton(
+              onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AppNewPostLocation(
+                      userProfile: userProfile!,
+                      point: currentLocation,
+                    );
+                  },
+                );
+              },
+              child: Icon(Icons.add_location),
+            ),
           SizedBox(width: 10),
           showLocationOptions
               ? Column(

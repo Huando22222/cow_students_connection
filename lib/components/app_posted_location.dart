@@ -2,13 +2,17 @@
 import 'dart:io';
 
 import 'package:cow_students_connection/components/app_text_field.dart';
+import 'package:cow_students_connection/config/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:http/http.dart' as http;
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/pages/chat.dart';
@@ -19,17 +23,40 @@ class AppPostedLocation extends StatelessWidget {
   final user userProfile;
   final LatLng point;
   final String mess;
+  final String postId;
 
   const AppPostedLocation({
     Key? key,
     required this.userProfile,
     required this.point,
     required this.mess,
+    required this.postId,
   }) : super(key: key);
   void callPhoneNumber(String phoneNumber) async {
     final Uri _url = Uri.parse('tel:$phoneNumber');
     if (!await launchUrl(_url)) {
       throw Exception('Could not launch $_url');
+    }
+  }
+
+  void deletePost(BuildContext context) async {
+    try {
+      // Replace 'your_node_server_url' with your actual Node.js server URL
+      var response = await http.post(
+        Uri.parse('${AppConfig.baseUrl}post-location/delete'),
+        body: {'postId': postId},
+      );
+
+      if (response.statusCode == 200) {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        // Successful deletion
+        // Handle any UI changes or notifications here
+      } else {
+        // Handle error responses
+      }
+    } catch (error) {
+      // Handle exceptions
     }
   }
 
@@ -86,7 +113,19 @@ class AppPostedLocation extends StatelessWidget {
                     ),
                     IconButton(
                       icon: Icon(Icons.delete),
-                      onPressed: () {},
+                      onPressed: () {
+                        QuickAlert.show(
+                          context: context,
+                          type: QuickAlertType.warning,
+                          text: 'Sure you want to delete Location?',
+                          confirmBtnText: 'Yes',
+                          // cancelBtnText: 'No',
+                          confirmBtnColor: Color.fromARGB(255, 200, 182, 47),
+                          onConfirmBtnTap: () {
+                            deletePost(context);
+                          },
+                        );
+                      },
                     ),
                   ],
                 )

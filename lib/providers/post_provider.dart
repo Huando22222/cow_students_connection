@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +12,7 @@ import '../data/models/postLocation.dart';
 
 class PostProvider extends ChangeNotifier {
   List<post> Posts = [];
+
   //List<post> get posts => Posts;
 
   void addPost(post newPost) {
