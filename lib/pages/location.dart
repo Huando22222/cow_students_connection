@@ -4,9 +4,9 @@ import 'package:cow_students_connection/components/app_posted_location.dart';
 import 'package:cow_students_connection/components/avatarContainer.dart';
 import 'package:cow_students_connection/components/marker_avatar_location.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
-import 'package:cow_students_connection/providers/post_location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -38,7 +38,7 @@ class _LocationState extends State<Location> {
     super.initState();
     userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
-    _startListeningToLocation(context);
+    _startListeningToLocation();
     _searchController = TextEditingController();
   }
 
@@ -47,12 +47,12 @@ class _LocationState extends State<Location> {
 
     if (!status.isGranted) {
       if (await Permission.location.request().isGranted) {
-        _startListeningToLocation(context);
+        _startListeningToLocation();
         _getCurrentLocation();
       }
     } else {
       _getCurrentLocation();
-      _startListeningToLocation(context);
+      _startListeningToLocation();
     }
   }
 
@@ -67,7 +67,7 @@ class _LocationState extends State<Location> {
     mapController.move(currentLocation, currentZoom);
   }
 
-  void _startListeningToLocation(BuildContext context) {
+  void _startListeningToLocation() {
     _positionStream
         ?.cancel(); // Hủy đăng ký lắng nghe vị trí trước khi bắt đầu mới
 
@@ -79,8 +79,6 @@ class _LocationState extends State<Location> {
           currentLocation = LatLng(position.latitude, position.longitude);
         });
       }
-      ////////////
-      context.read<PostLocationProvider>().fetchPosts();
     });
   }
 
@@ -141,6 +139,10 @@ class _LocationState extends State<Location> {
         children: [
           Column(
             children: [
+              // SizedBox(
+              //   height: 200,
+              //   //  child: _buildSearchBar(),
+              // ),
               Expanded(
                 child: TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -149,13 +151,11 @@ class _LocationState extends State<Location> {
               ),
             ],
           ),
-          // Consumer<PostLocationProvider>( builder: (context, value, child){
-          //   return  MarkerAvatarLocation(
-          //     userProfile: userProfile!,
-          //     point: currentLocation,
-          //     mess: mess,
-          //   );
-          // }),
+          // MarkerAvatarLocation(
+          //   userProfile: userProfile!,
+          //   point: LatLng(10.56451, 101.656),
+          //   mess: mess,
+          // ),
           if (showLocationOptions)
             MarkerAvatarLocation(
               userProfile: userProfile!,

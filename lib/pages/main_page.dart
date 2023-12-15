@@ -34,10 +34,11 @@ class _MainPageState extends State<MainPage> {
       child: HomePage(),
     ),
     ChatPage(),
-    ChangeNotifierProvider(
-      create: (context) => PostLocationProvider(),
-      child: Location(),
-    ),
+    // ChangeNotifierProvider(
+    //   create: (context) => PostLocationProvider(),
+    //   child: Location(),
+    // ),
+    Location(),
     Center(
       child: Text("Notification"),
     ),
