@@ -1,24 +1,20 @@
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cow_students_connection/data/models/post.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 class PostLocationProvider extends ChangeNotifier {
   List<postLocation> PostLocations = [];
-  //List<post> get posts => Posts;
+  bool isPosted = false;
 
-  // void addPostlocation(postLocation newPost) {
-  //   PostLocations.insert(0, newPost);
-  //   notifyListeners();
-  // }
-
-  Future<void> fetchPosts() async {
+  Future<void> fetchPosts(BuildContext context) async {
     print("get refresh location");
-    // List<postLocation> fetchedPosts = [];
     try {
       final response =
           await http.get(Uri.parse('${AppConfig.baseUrl}post-location/'));
@@ -29,6 +25,14 @@ class PostLocationProvider extends ChangeNotifier {
             .map((data) => postLocation.fromJson(data))
             .toList();
         print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
+        print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
+        if (PostLocations.any((location) =>
+            location.owner!.id == context.read<AppRepo>().User!.id)) {
+          isPosted = true;
+          print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
+        } else {
+          isPosted = false;
+        }
 
         notifyListeners();
       } else {

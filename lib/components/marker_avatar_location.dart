@@ -15,8 +15,8 @@ class MarkerAvatarLocation extends StatelessWidget {
     required this.postLocations,
   });
 
-  void _showUserProfile(
-      BuildContext context, user user, LatLng point, String mess) {
+  void _showUserProfile(BuildContext context, user user, LatLng point,
+      String mess, String postId) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -24,6 +24,7 @@ class MarkerAvatarLocation extends StatelessWidget {
           userProfile: user,
           point: point,
           mess: mess,
+          postId: postId,
         );
       },
     );
@@ -52,6 +53,7 @@ class MarkerAvatarLocation extends StatelessWidget {
                     postLocation.location!.longitude,
                   ),
                   mess: postLocation.message!,
+                  postId: postLocation.id!,
                 );
               },
             );

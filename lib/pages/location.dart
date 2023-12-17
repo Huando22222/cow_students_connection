@@ -36,11 +36,13 @@ class _LocationState extends State<Location> {
   String mess = 'mess';
   @override
   void initState() {
+    context.read<PostLocationProvider>().fetchPosts(context);
     super.initState();
     userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
-    _startListeningToLocation();
+    _startListeningToLocation(context);
     _searchController = TextEditingController();
+    // var isPosted = tr
   }
 
   void _initLocationUpdates() async {
@@ -48,12 +50,12 @@ class _LocationState extends State<Location> {
 
     if (!status.isGranted) {
       if (await Permission.location.request().isGranted) {
-        _startListeningToLocation();
+        _startListeningToLocation(context);
         _getCurrentLocation();
       }
     } else {
       _getCurrentLocation();
-      _startListeningToLocation();
+      _startListeningToLocation(context);
     }
   }
 
@@ -68,10 +70,9 @@ class _LocationState extends State<Location> {
     mapController.move(currentLocation, currentZoom);
   }
 
-  void _startListeningToLocation() {
+  void _startListeningToLocation(BuildContext context) {
     _positionStream
         ?.cancel(); // Hủy đăng ký lắng nghe vị trí trước khi bắt đầu mới
-
     _positionStream =
         Geolocator.getPositionStream().listen((Position position) {
       if (mounted) {
@@ -80,6 +81,8 @@ class _LocationState extends State<Location> {
           currentLocation = LatLng(position.latitude, position.longitude);
         });
       }
+      ////////////
+      context.read<PostLocationProvider>().fetchPosts(context);
     });
   }
 
@@ -140,10 +143,6 @@ class _LocationState extends State<Location> {
         children: [
           Column(
             children: [
-              // SizedBox(
-              //   height: 200,
-              //   //  child: _buildSearchBar(),
-              // ),
               Expanded(
                 child: TileLayer(
                   urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
@@ -153,90 +152,74 @@ class _LocationState extends State<Location> {
             ],
           ),
 
-          // Expanded(
-          //   child: Consumer<PostLocationProvider>(
-          //       builder: (context, value, child) {
-          //     return ListView.builder(
-          //       itemBuilder: (context, index) {
-          //         LatLng tempPoint = LatLng(
-          //             value.PostLocations[index].location!.latitude,
-          //             value.PostLocations[index].location!.longitude);
-          //         return MarkerAvatarLocation(
-          //           userProfile: value.PostLocations[index].owner!,
-          //           point: tempPoint,
-          //           mess: value.PostLocations[index].message!,
-          //         );
-          //       },
-          //       itemCount: value.PostLocations.length,
-          //     );
-          //   }),
-          // ),
-
-          // MarkerAvatarLocation(
-          //   userProfile: userProfile!,
-          //   point: LatLng(10.56451, 101.656),
-          //   mess: mess,
-          // ),
-          if (showLocationOptions)
-            MarkerAvatarLocation(
-              postLocations: context.read<PostLocationProvider>().PostLocations,
-            ),
+          MarkerAvatarLocation(
+            postLocations: context.read<PostLocationProvider>().PostLocations,
+          ),
           // Other FlutterMap children
         ],
       ),
-      floatingActionButton: showLocationOptions
-          ? Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                FloatingActionButton(
-                  onPressed: _zoomIn,
-                  child: Icon(Icons.add),
-                ),
-                SizedBox(height: 10),
-                FloatingActionButton(
-                  onPressed: _zoomOut,
-                  child: Icon(Icons.remove),
-                ),
-                SizedBox(height: 10),
-                FloatingActionButton(
-                  onPressed: _goToCurrentLocation,
-                  child: Icon(Icons.my_location),
-                ),
-                SizedBox(height: 10),
-                FloatingActionButton(
-                  onPressed: () {
-                    setState(() {
-                      showLocationOptions = false;
-                    });
-                  },
-                  child: Icon(Icons.close),
-                ),
-              ],
-            )
-          : FloatingActionButton(
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Visibility(
+            visible: context.watch<PostLocationProvider>().isPosted == false,
+            child: FloatingActionButton(
               onPressed: () {
-                // setState(() {
-                //   showLocationOptions = true;
-                // });
                 showModalBottomSheet(
                   context: context,
                   builder: (BuildContext context) {
                     return AppNewPostLocation(
                       userProfile: userProfile!,
                       point: currentLocation,
-                      toggleLocationOptions: (bool showOptions) {
-                        setState(() {
-                          showLocationOptions =
-                              showOptions; // Update showLocationOptions
-                        });
-                      },
                     );
                   },
                 );
               },
-              child: Icon(Icons.add_box),
+              child: Icon(Icons.add_location),
             ),
+          ),
+          SizedBox(width: 10),
+          showLocationOptions
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    FloatingActionButton(
+                      onPressed: _zoomIn,
+                      child: Icon(Icons.add),
+                    ),
+                    SizedBox(height: 10),
+                    FloatingActionButton(
+                      onPressed: _zoomOut,
+                      child: Icon(Icons.remove),
+                    ),
+                    SizedBox(height: 10),
+                    FloatingActionButton(
+                      onPressed: _goToCurrentLocation,
+                      child: Icon(Icons.my_location),
+                    ),
+                    SizedBox(height: 10),
+                    FloatingActionButton(
+                      onPressed: () {
+                        setState(() {
+                          showLocationOptions = false;
+                        });
+                      },
+                      child: Icon(Icons.close),
+                    ),
+                  ],
+                )
+              : FloatingActionButton(
+                  onPressed: () {
+                    setState(() {
+                      showLocationOptions = true;
+                    });
+                  },
+                  child: Icon(Icons.arrow_upward),
+                ),
+        ],
+      ),
     );
   }
 }
