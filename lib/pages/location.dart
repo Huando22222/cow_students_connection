@@ -169,10 +169,9 @@ class _LocationState extends State<Location> {
           //   }),
           // ),
 
-          if (showLocationOptions == false)
-            MarkerAvatarLocation(
-              postLocations: context.read<PostLocationProvider>().PostLocations,
-            ),
+          MarkerAvatarLocation(
+            postLocations: context.read<PostLocationProvider>().PostLocations,
+          ),
           // Other FlutterMap children
         ],
       ),
