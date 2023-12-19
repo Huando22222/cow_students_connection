@@ -1,10 +1,5 @@
-import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/components/app_newpost_location.dart';
-import 'package:cow_students_connection/components/app_posted_location.dart';
-import 'package:cow_students_connection/components/avatarContainer.dart';
 import 'package:cow_students_connection/components/marker_avatar_location.dart';
-import 'package:cow_students_connection/config/app_config.dart';
-import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/post_location_provider.dart';
@@ -14,11 +9,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -30,10 +21,8 @@ StreamSubscription<Position>? _positionStream;
 class _LocationState extends State<Location> {
   MapController mapController = MapController();
   LatLng currentLocation = LatLng(0.0, 0.0); // Default location
-  late TextEditingController _searchController;
   double currentZoom = 13.0;
   user? userProfile;
-  String mess = 'mess';
   @override
   void initState() {
     context.read<PostLocationProvider>().fetchPosts(context);
@@ -41,7 +30,6 @@ class _LocationState extends State<Location> {
     userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
     _startListeningToLocation(context);
-    _searchController = TextEditingController();
     // var isPosted = tr
   }
 
@@ -89,17 +77,7 @@ class _LocationState extends State<Location> {
   @override
   void dispose() {
     _positionStream?.cancel(); // Hủy đăng ký lắng nghe vị trí trước khi dispose
-    _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _openInGoogleMaps() async {
-    final Uri _url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=${currentLocation!.latitude},${currentLocation!.longitude}');
-
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
-    }
   }
 
   void _zoomIn() {
@@ -114,7 +92,7 @@ class _LocationState extends State<Location> {
 
   void _zoomOut() {
     double newZoom = currentZoom - 1.0;
-    if (newZoom >= 1.0) {
+    if (newZoom >= 2.0) {
       setState(() {
         currentZoom = newZoom;
         mapController.move(currentLocation, newZoom);
@@ -139,22 +117,45 @@ class _LocationState extends State<Location> {
         options: MapOptions(
           initialCenter: currentLocation,
           initialZoom: currentZoom,
+          minZoom: 5,
+          maxZoom: 20,
+          backgroundColor: Color.fromARGB(255, 133, 203, 250),
         ),
         children: [
           Column(
             children: [
               Expanded(
                 child: TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate:
+                      "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL",
                   userAgentPackageName: 'com.example.app',
                 ),
               ),
             ],
           ),
 
-          MarkerAvatarLocation(
-            postLocations: context.read<PostLocationProvider>().PostLocations,
+          MarkerLayer(
+            markers: [
+              Marker(
+                width: 80.0,
+                height: 80.0,
+                point: currentLocation,
+                child: Icon(
+                  Icons.my_location_rounded,
+                  color: Colors.blue,
+                  size: 40.0,
+                ),
+              ),
+              // Add other markers if needed
+            ],
           ),
+          ChangeNotifierProvider(
+            create: (context) => PostLocationProvider(),
+            child: MarkerAvatarLocation(
+              postLocations: context.read<PostLocationProvider>().PostLocations,
+            ),
+          ),
+
           // Other FlutterMap children
         ],
       ),

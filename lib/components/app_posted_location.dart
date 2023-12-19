@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:cow_students_connection/components/app_text_field.dart';
+import 'package:cow_students_connection/components/app_user_profileInfo.dart';
 import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/pages/location.dart';
 import 'package:cow_students_connection/providers/post_location_provider.dart';
@@ -83,8 +84,15 @@ class AppPostedLocation extends StatelessWidget {
             Row(
               children: [
                 AppAvatar(
+                  onImagePicked: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => UserProfileInfo(
+                                  userProfile: userProfile,
+                                )));
+                  },
                   pathImage: userProfile.avatar,
-                  size: 75,
                 ),
                 SizedBox(width: 10),
                 Text(
@@ -97,14 +105,18 @@ class AppPostedLocation extends StatelessWidget {
                 SizedBox(width: 10),
                 Row(
                   children: [
-                    IconButton(
-                      icon: Icon(Icons.message),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => ChatPage()),
-                        );
-                      },
+                    Visibility(
+                      visible:
+                          context.watch<AppRepo>().User!.id != userProfile.id,
+                      child: IconButton(
+                        icon: Icon(Icons.message),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ChatPage()),
+                          );
+                        },
+                      ),
                     ),
                     IconButton(
                       icon: Icon(Icons.map),
@@ -112,21 +124,25 @@ class AppPostedLocation extends StatelessWidget {
                         _openInGoogleMaps(point.latitude, point.longitude);
                       },
                     ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        QuickAlert.show(
-                          context: context,
-                          type: QuickAlertType.warning,
-                          text: 'Sure you want to delete Location?',
-                          confirmBtnText: 'Yes',
-                          // cancelBtnText: 'No',
-                          confirmBtnColor: Color.fromARGB(255, 200, 182, 47),
-                          onConfirmBtnTap: () {
-                            deletePost(context);
-                          },
-                        );
-                      },
+                    Visibility(
+                      visible:
+                          context.watch<AppRepo>().User!.id == userProfile.id,
+                      child: IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          QuickAlert.show(
+                            context: context,
+                            type: QuickAlertType.warning,
+                            text: 'Sure you want to delete Location?',
+                            confirmBtnText: 'Yes',
+                            // cancelBtnText: 'No',
+                            confirmBtnColor: Color.fromARGB(255, 200, 182, 47),
+                            onConfirmBtnTap: () {
+                              deletePost(context);
+                            },
+                          );
+                        },
+                      ),
                     ),
                   ],
                 )
