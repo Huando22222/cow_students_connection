@@ -82,7 +82,7 @@ class _LocationState extends State<Location> {
 
   void _zoomIn() {
     double newZoom = currentZoom + 1.0;
-    if (newZoom <= 20.0) {
+    {
       setState(() {
         currentZoom = newZoom;
         mapController.move(currentLocation, newZoom);
@@ -92,7 +92,7 @@ class _LocationState extends State<Location> {
 
   void _zoomOut() {
     double newZoom = currentZoom - 1.0;
-    if (newZoom >= 2.0) {
+    {
       setState(() {
         currentZoom = newZoom;
         mapController.move(currentLocation, newZoom);
