@@ -132,7 +132,7 @@ class _LocationState extends State<Location> {
               maxZoom: 20,
               backgroundColor: isMapDarkMode
                   ? Color.fromARGB(255, 23, 33, 49)
-                  : Color.fromARGB(255, 133, 203, 250),
+                  : Color.fromARGB(255, 192, 218, 242),
             ),
             children: [
               Column(
@@ -141,7 +141,7 @@ class _LocationState extends State<Location> {
                     child: TileLayer(
                       urlTemplate: isMapDarkMode
                           ? 'https://api.maptiler.com/maps/streets-v2-dark/256/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL'
-                          : 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL',
+                          : 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL',
                     ),
                   ),
                 ],
