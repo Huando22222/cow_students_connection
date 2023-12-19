@@ -33,6 +33,14 @@ class _LocationState extends State<Location> {
     // var isPosted = tr
   }
 
+  bool isMapDarkMode = false;
+
+  void toggleMapMode() {
+    setState(() {
+      isMapDarkMode = !isMapDarkMode;
+    });
+  }
+
   void _initLocationUpdates() async {
     var status = await Permission.location.status;
 
@@ -113,49 +121,68 @@ class _LocationState extends State<Location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FlutterMap(
-        mapController: mapController,
-        options: MapOptions(
-          initialCenter: currentLocation,
-          initialZoom: currentZoom,
-          minZoom: 5,
-          maxZoom: 20,
-          backgroundColor: Color.fromARGB(255, 133, 203, 250),
-        ),
+      body: Stack(
         children: [
-          Column(
+          FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              initialCenter: currentLocation,
+              initialZoom: currentZoom,
+              minZoom: 5,
+              maxZoom: 20,
+              backgroundColor: isMapDarkMode
+                  ? Color.fromARGB(255, 23, 33, 49)
+                  : Color.fromARGB(255, 133, 203, 250),
+            ),
             children: [
-              Expanded(
-                child: TileLayer(
-                    urlTemplate:
-                        'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL'),
+              Column(
+                children: [
+                  Expanded(
+                    child: TileLayer(
+                      urlTemplate: isMapDarkMode
+                          ? 'https://api.maptiler.com/maps/streets-v2-dark/256/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL'
+                          : 'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL',
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
 
-          MarkerLayer(
-            markers: [
-              Marker(
-                width: 80.0,
-                height: 80.0,
-                point: currentLocation,
-                child: Icon(
-                  Icons.my_location_rounded,
-                  color: Colors.blue,
-                  size: 40.0,
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: currentLocation,
+                    child: Icon(
+                      Icons.my_location_rounded,
+                      color: Colors.blue,
+                      size: 40.0,
+                    ),
+                  ),
+                  // Add other markers if needed
+                ],
+              ),
+              ChangeNotifierProvider(
+                create: (context) => PostLocationProvider(),
+                child: MarkerAvatarLocation(
+                  postLocations:
+                      context.read<PostLocationProvider>().PostLocations,
                 ),
               ),
-              // Add other markers if needed
+
+              // Other FlutterMap children
             ],
           ),
-          ChangeNotifierProvider(
-            create: (context) => PostLocationProvider(),
-            child: MarkerAvatarLocation(
-              postLocations: context.read<PostLocationProvider>().PostLocations,
+          Positioned(
+            top: 100.0, // Điều chỉnh vị trí bottom của nút
+            child: IconButton(
+              onPressed: toggleMapMode,
+              icon: Icon(
+                isMapDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: isMapDarkMode ? Colors.white : Colors.black,
+              ),
             ),
           ),
-
-          // Other FlutterMap children
         ],
       ),
       floatingActionButton: Row(
