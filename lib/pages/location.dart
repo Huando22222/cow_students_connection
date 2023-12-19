@@ -101,7 +101,8 @@ class _LocationState extends State<Location> {
   }
 
   void _goToCurrentLocation() {
-    mapController.move(currentLocation, currentZoom);
+    currentZoom = 13.0;
+    mapController.move(currentLocation, 13.0);
     // Set the desired rotation to make sure the map faces the correct direction
     mapController
         .rotate(0.0); // 0.0 represents the angle in radians, adjust as needed
@@ -126,10 +127,8 @@ class _LocationState extends State<Location> {
             children: [
               Expanded(
                 child: TileLayer(
-                  urlTemplate:
-                      "https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL",
-                  userAgentPackageName: 'com.example.app',
-                ),
+                    urlTemplate:
+                        'https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL'),
               ),
             ],
           ),
