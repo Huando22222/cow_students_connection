@@ -20,7 +20,7 @@ class ChatProvider extends ChangeNotifier {
   void addListMessages(List<message> messages) {
     chats.clear();
     chats.addAll(messages);
-    print("chat length: ${chats.length}");
+    print("chats length: ${chats.length}");
     notifyListeners();
   }
 
@@ -31,6 +31,13 @@ class ChatProvider extends ChangeNotifier {
     //   print(element.content);
     // });
     print("room length: ${rooms.length}");
+    notifyListeners();
+  }
+
+  void addListRooms(List<room> rooms) {
+    rooms.clear();
+    rooms.addAll(rooms);
+    print("rooms length: ${rooms.length}");
     notifyListeners();
   }
 }

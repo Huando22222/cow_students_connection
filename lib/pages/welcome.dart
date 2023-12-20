@@ -10,6 +10,8 @@ import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/app_temp.dart';
+import 'package:cow_students_connection/providers/chat_provider.dart';
+import 'package:cow_students_connection/util/socket/socket_methods.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -28,6 +30,7 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
   // Thêm hàm khởi tạo để khởi tạo ImagePickerHelper
+  SocketMethods _socketMethods = new SocketMethods();
   var firstName;
   var lastName;
   var phone;
@@ -166,6 +169,10 @@ class _WelcomePageState extends State<WelcomePage> {
                           final responseData = jsonDecode(response.body);
                           context.read<AppRepo>().User =
                               user.fromJson(responseData["user"]);
+                          // List<String> members = [];
+                          // members.add(context.read<AppRepo>().User!.id!);
+                          // _socketMethods
+                          //     .joinRoom(context.read<AppRepo>().User!.id!);
                           print(
                               'updated profile ${context.read<AppRepo>().User!.id} \n ${context.read<AppRepo>().User!.birthDay}');
                           Navigator.of(context)

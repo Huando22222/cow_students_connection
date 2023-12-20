@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:cow_students_connection/data/models/message.dart';
 import 'package:cow_students_connection/data/models/room.dart';
 import 'package:cow_students_connection/data/models/user.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/chat_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +21,7 @@ class SocketMethods {
       List<room> rooms = context.read<ChatProvider>().rooms;
       print("Socket connected: ${_socketClient.id}");
       // joinRoom("657ef0d7baf32fe21da8b42b");
+      joinRoom(context.read<AppRepo>().User!.id!);
       for (var room in rooms) {
         joinRoom(room.id);
       }
@@ -30,9 +32,8 @@ class SocketMethods {
     });
 
     _socketClient.on("add-room", (data) {
-      print("run into add-room");
       try {
-        print("add-room received data: ");
+        print("add-room received data: ${data}");
         room recievedRoom = room.fromJson(data);
         print("created room from socket: ${recievedRoom}"); // huan sua sau
         context.read<ChatProvider>().addRoom(recievedRoom);

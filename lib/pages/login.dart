@@ -109,8 +109,7 @@ class LoginPage extends StatelessWidget {
                       print(
                           "${context.read<AppRepo>().phone}---------------------Server recieved ACCOUNT :${context.read<AppRepo>().password}--------------------");
                       final response = await http.post(
-                        Uri.parse(
-                            '${AppConfig.baseUrl}user/login'), // Thay đổi URL và endpoint của bạn
+                        Uri.parse('${AppConfig.baseUrl}user/login'),
                         body: {
                           'phone': context.read<AppRepo>().phone,
                           'password': context.read<AppRepo>().password,
@@ -118,7 +117,6 @@ class LoginPage extends StatelessWidget {
                       );
 
                       if (response.statusCode == 200) {
-                        // SocketClient mySocket = SocketClient.instance;
                         final SocketMethods _socketMethods = SocketMethods();
                         _socketMethods.MessageListener(context);
 
@@ -126,26 +124,22 @@ class LoginPage extends StatelessWidget {
                         final accountData =
                             account.fromJson(responseData['account']);
                         context.read<AppRepo>().Account = accountData;
-                        //  Posts = (responseData["data"] as List)
-                        //     .map((data) => post.fromJson(data))
-                        //     .toList();
-                        //final roomData = room.fromjson(responseData['room']);
-                        context.read<ChatProvider>().rooms =
-                            (responseData['room'] as List)
-                                .map((data) => room.fromJson(data))
-                                .toList();
-                        print(
-                            "room: ${context.read<ChatProvider>().rooms[0].roomName}");
+                        if (responseData['room'] != null) {
+                          context.read<ChatProvider>().addListRooms(
+                                (responseData['room'] as List)
+                                    .map((data) => room.fromJson(data))
+                                    .toList(),
+                              );
+
+                          print(
+                              "room: ${context.read<ChatProvider>().rooms[0].roomName}");
+                        }
                         print(
                             "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
                         var userData = responseData['user'];
                         if (userData == null) {
                           print("user data have value null ( object )");
                           Navigator.of(context).pushNamed(AppRoutes.welcome);
-                          // context.read<AppRepo>().User = userData;
-                          // print(
-                          //     "Received user data: ${context.read<AppRepo>().User!.firstName}");
-                          // Navigator.of(context).pushNamed(AppRoutes.main);
                         } else {
                           userData = user.fromJson(responseData['user']);
                           context.read<AppRepo>().User = userData;
