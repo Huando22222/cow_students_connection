@@ -18,7 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:http/http.dart' as http;
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/data/models/user.dart';
-import 'package:cow_students_connection/pages/chat.dart';
+import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 
@@ -105,6 +105,7 @@ class AppPostedLocation extends StatelessWidget {
                 SizedBox(width: 10),
                 Row(
                   children: [
+
                     Visibility(
                       visible:
                           context.watch<AppRepo>().User!.id != userProfile.id,
@@ -113,10 +114,11 @@ class AppPostedLocation extends StatelessWidget {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ChatPage()),
+                            MaterialPageRoute(builder: (context) => ChatPage()),//////////////////huan fix sau lai
                           );
                         },
                       ),
+
                     ),
                     IconButton(
                       icon: Icon(Icons.map),

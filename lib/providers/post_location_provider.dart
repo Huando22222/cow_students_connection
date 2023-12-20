@@ -27,14 +27,13 @@ class PostLocationProvider extends ChangeNotifier {
 
         if (PostLocations.isNotEmpty) {
           print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
-          print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
           if (PostLocations.any((location) =>
               location.owner!.id == context.read<AppRepo>().User!.id)) {
             isPosted = true;
-            print("hás dataaaaaaaaaaaaaaaaaaaaaaaaaa ${isPosted}");
           } else {
             isPosted = false;
           }
+
         } else {
           isPosted = false;
         }

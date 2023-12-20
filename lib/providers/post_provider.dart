@@ -1,14 +1,8 @@
-import 'dart:ffi';
-
 import 'package:cow_students_connection/config/app_config.dart';
-import 'package:cow_students_connection/data/models/user.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:cow_students_connection/data/models/post.dart';
-import 'package:latlong2/latlong.dart';
-
-import '../data/models/postLocation.dart';
 
 class PostProvider extends ChangeNotifier {
   List<post> Posts = [];

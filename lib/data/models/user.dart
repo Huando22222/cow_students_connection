@@ -6,9 +6,11 @@ class user {
   final String? gender;
   final String? avatar;
   final String? phone;
+  final List<user>? friends;
+  final List<String>? rooms;
   final String idAcc;
 
-  user(
+  user({
     this.id,
     this.firstName,
     this.lastName,
@@ -16,20 +18,27 @@ class user {
     this.birthDay,
     this.avatar,
     this.phone,
-    this.idAcc,
-  );
+    this.friends,
+    this.rooms,
+    required this.idAcc,
+  });
 
   factory user.fromJson(Map<String, dynamic> json) {
     return user(
-      json['_id'] as String?, // Chuyển đổi kiểu dữ liệu
-      json['firstName'] as String?,
-      json['lastName'] as String?,
-      json['gender']
-          as String?, // Có thể cần xử lý tùy thuộc vào dữ liệu thực tế
-      json['birthDay'] != null ? DateTime.parse(json['birthDay']) : null,
-      json['avatar'] as String?,
-      json['phone'] as String?,
-      json['idAcc'] as String? ?? '',
+      id: json['_id'],
+      firstName: json['firstName'],
+      lastName: json['lastName'],
+      gender: json['gender'],
+      birthDay:
+          json['birthDay'] != null ? DateTime.parse(json['birthDay']) : null,
+      avatar: json['avatar'],
+      phone: json['phone'],
+      friends: json['friends'] != null
+          ? List<user>.from((json['friends'] as List)
+              .map((userJson) => user.fromJson(userJson)))
+          : null,
+      rooms: json['rooms'] != null ? List<String>.from(json['rooms']) : null,
+      idAcc: json['idAcc'],
     );
   }
 
@@ -42,6 +51,8 @@ class user {
       'birthDay': birthDay?.toIso8601String(),
       'avatar': avatar,
       'phone': phone,
+      'friends': friends?.map((user) => user.toJson()).toList(),
+      'rooms': rooms,
       'idAcc': idAcc,
     };
   }

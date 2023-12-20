@@ -17,7 +17,7 @@ class AppRoutes {
     // home: (context) => ChangeNotifierProvider(
     //       create: (context) => PostProvider(),
     //       child: HomePage(),
-    //     ),
+    // ),
 
     otp: (context) => OTPPage(),
     //login: (context) => ChangeNotifierProvider(

@@ -21,7 +21,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/data/models/user.dart';
-import 'package:cow_students_connection/pages/chat.dart';
+import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 
