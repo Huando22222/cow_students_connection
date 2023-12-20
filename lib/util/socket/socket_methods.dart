@@ -33,9 +33,9 @@ class SocketMethods {
       print("run into add-room");
       try {
         print("add-room received data: ");
-        // room recievedRoom = room.fromJson(data);
-        // print("created room from socket: ${recievedRoom}");
-        //context.read<ChatProvider>().addRoom(recievedRoom);
+        room recievedRoom = room.fromJson(data);
+        print("created room from socket: ${recievedRoom}"); // huan sua sau
+        context.read<ChatProvider>().addRoom(recievedRoom);
       } catch (e) {
         print("Error in add-room: $e");
       }

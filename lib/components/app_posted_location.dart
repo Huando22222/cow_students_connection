@@ -105,20 +105,18 @@ class AppPostedLocation extends StatelessWidget {
                 SizedBox(width: 10),
                 Row(
                   children: [
-
                     Visibility(
                       visible:
                           context.watch<AppRepo>().User!.id != userProfile.id,
                       child: IconButton(
                         icon: Icon(Icons.message),
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => ChatPage()),//////////////////huan fix sau lai
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => ChatToPerson()),//////////////////huan fix sau lai
+                          // );
                         },
                       ),
-
                     ),
                     IconButton(
                       icon: Icon(Icons.map),
