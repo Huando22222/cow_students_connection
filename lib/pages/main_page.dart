@@ -1,4 +1,5 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
+/////tao folder chat 
 import 'package:cow_students_connection/pages/chat/chat_page.dart';
 import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 
@@ -34,8 +35,10 @@ class _MainPageState extends State<MainPage> {
       create: (context) => PostProvider(),
       child: HomePage(),
     ),
+
     ChatPage(),
     // ChatToPerson(),
+
     ChangeNotifierProvider(
       create: (context) => PostLocationProvider(),
       child: Location(),

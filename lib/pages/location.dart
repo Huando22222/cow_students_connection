@@ -1,10 +1,5 @@
-import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/components/app_newpost_location.dart';
-import 'package:cow_students_connection/components/app_posted_location.dart';
-import 'package:cow_students_connection/components/avatarContainer.dart';
 import 'package:cow_students_connection/components/marker_avatar_location.dart';
-import 'package:cow_students_connection/config/app_config.dart';
-import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/post_location_provider.dart';
@@ -14,11 +9,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'dart:async';
-import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:permission_handler/permission_handler.dart';
-
-import 'package:url_launcher/url_launcher.dart';
 
 class Location extends StatefulWidget {
   @override
@@ -30,10 +21,8 @@ StreamSubscription<Position>? _positionStream;
 class _LocationState extends State<Location> {
   MapController mapController = MapController();
   LatLng currentLocation = LatLng(0.0, 0.0); // Default location
-  late TextEditingController _searchController;
   double currentZoom = 13.0;
   user? userProfile;
-  String mess = 'mess';
   @override
   void initState() {
     context.read<PostLocationProvider>().fetchPosts(context);
@@ -41,8 +30,15 @@ class _LocationState extends State<Location> {
     userProfile = context.read<AppRepo>().User;
     _initLocationUpdates();
     _startListeningToLocation(context);
-    _searchController = TextEditingController();
     // var isPosted = tr
+  }
+
+  bool isMapDarkMode = false;
+
+  void toggleMapMode() {
+    setState(() {
+      isMapDarkMode = !isMapDarkMode;
+    });
   }
 
   void _initLocationUpdates() async {
@@ -89,22 +85,12 @@ class _LocationState extends State<Location> {
   @override
   void dispose() {
     _positionStream?.cancel(); // Hủy đăng ký lắng nghe vị trí trước khi dispose
-    _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _openInGoogleMaps() async {
-    final Uri _url = Uri.parse(
-        'https://www.google.com/maps/search/?api=1&query=${currentLocation!.latitude},${currentLocation!.longitude}');
-
-    if (!await launchUrl(_url)) {
-      throw Exception('Could not launch $_url');
-    }
   }
 
   void _zoomIn() {
     double newZoom = currentZoom + 1.0;
-    if (newZoom <= 20.0) {
+    {
       setState(() {
         currentZoom = newZoom;
         mapController.move(currentLocation, newZoom);
@@ -114,7 +100,7 @@ class _LocationState extends State<Location> {
 
   void _zoomOut() {
     double newZoom = currentZoom - 1.0;
-    if (newZoom >= 1.0) {
+    {
       setState(() {
         currentZoom = newZoom;
         mapController.move(currentLocation, newZoom);
@@ -123,7 +109,8 @@ class _LocationState extends State<Location> {
   }
 
   void _goToCurrentLocation() {
-    mapController.move(currentLocation, currentZoom);
+    currentZoom = 13.0;
+    mapController.move(currentLocation, 13.0);
     // Set the desired rotation to make sure the map faces the correct direction
     mapController
         .rotate(0.0); // 0.0 represents the angle in radians, adjust as needed
@@ -134,28 +121,68 @@ class _LocationState extends State<Location> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FlutterMap(
-        mapController: mapController,
-        options: MapOptions(
-          initialCenter: currentLocation,
-          initialZoom: currentZoom,
-        ),
+      body: Stack(
         children: [
-          Column(
+          FlutterMap(
+            mapController: mapController,
+            options: MapOptions(
+              initialCenter: currentLocation,
+              initialZoom: currentZoom,
+              minZoom: 5,
+              maxZoom: 20,
+              backgroundColor: isMapDarkMode
+                  ? Color.fromARGB(255, 23, 33, 49)
+                  : Color.fromARGB(255, 192, 218, 242),
+            ),
             children: [
-              Expanded(
-                child: TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                  userAgentPackageName: 'com.example.app',
+              Column(
+                children: [
+                  Expanded(
+                    child: TileLayer(
+                      urlTemplate: isMapDarkMode
+                          ? 'https://api.maptiler.com/maps/streets-v2-dark/256/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL'
+                          : 'https://api.maptiler.com/maps/bright-v2/{z}/{x}/{y}.png?key=a4UotWV3pLrxUUEhGJsL',
+                    ),
+                  ),
+                ],
+              ),
+
+              MarkerLayer(
+                markers: [
+                  Marker(
+                    width: 80.0,
+                    height: 80.0,
+                    point: currentLocation,
+                    child: Icon(
+                      Icons.my_location_rounded,
+                      color: Colors.blue,
+                      size: 40.0,
+                    ),
+                  ),
+                  // Add other markers if needed
+                ],
+              ),
+              ChangeNotifierProvider(
+                create: (context) => PostLocationProvider(),
+                child: MarkerAvatarLocation(
+                  postLocations:
+                      context.read<PostLocationProvider>().PostLocations,
                 ),
               ),
+
+              // Other FlutterMap children
             ],
           ),
-
-          MarkerAvatarLocation(
-            postLocations: context.read<PostLocationProvider>().PostLocations,
+          Positioned(
+            top: 100.0, // Điều chỉnh vị trí bottom của nút
+            child: IconButton(
+              onPressed: toggleMapMode,
+              icon: Icon(
+                isMapDarkMode ? Icons.light_mode : Icons.dark_mode,
+                color: isMapDarkMode ? Colors.white : Colors.black,
+              ),
+            ),
           ),
-          // Other FlutterMap children
         ],
       ),
       floatingActionButton: Row(
