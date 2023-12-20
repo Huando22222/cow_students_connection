@@ -3,9 +3,11 @@ import 'package:cow_students_connection/components/app_posted_location.dart';
 import 'package:cow_students_connection/components/app_user_profileInfo.dart';
 import 'package:cow_students_connection/data/models/postLocation.dart';
 import 'package:cow_students_connection/data/models/user.dart';
+import 'package:cow_students_connection/providers/post_location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:cow_students_connection/components/app_avatar.dart';
 
@@ -55,6 +57,15 @@ class MarkerAvatarLocation extends StatelessWidget {
                   mess: postLocation.message!,
                   postId: postLocation.id!,
                 );
+                // AppPostedLocation(
+                //               userProfile: postLocation.owner!,
+                //               point: LatLng(
+                //                 postLocation.location!.latitude,
+                //                 postLocation.location!.longitude,
+                //               ),
+                //               mess: postLocation.message!,
+                //               postId: postLocation.id!,
+                //             );
               },
             );
             // _showUserProfile(
