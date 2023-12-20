@@ -15,11 +15,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:quickalert/models/quickalert_type.dart';
+import 'package:quickalert/widgets/quickalert_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:cow_students_connection/components/app_avatar.dart';
 import 'package:cow_students_connection/data/models/user.dart';
-import 'package:cow_students_connection/pages/chat.dart';
+import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
 
@@ -27,13 +29,10 @@ class AppNewPostLocation extends StatelessWidget {
   final user userProfile;
   final LatLng point;
 
-  final Function(bool) toggleLocationOptions;
-
   const AppNewPostLocation({
     Key? key,
     required this.userProfile,
     required this.point,
-    required this.toggleLocationOptions,
   }) : super(key: key);
 
   Future<void> _openInGoogleMaps(double latitude, double longitude) async {
@@ -62,6 +61,8 @@ class AppNewPostLocation extends StatelessWidget {
           body: body // Thay đổi URL và endpoint của bạn
           );
       if (response.statusCode == 200) {
+        Navigator.pop(context);
+        Navigator.pop(context);
         print("uploadPostLocation thanh cong");
       }
     }
@@ -123,10 +124,23 @@ class AppNewPostLocation extends StatelessWidget {
                             print(userProfile.firstName);
                             print(content);
                             print('${point.latitude} - ${point.longitude}');
-                            uploadPostLocation();
 
-                            Navigator.pop(context);
-                            toggleLocationOptions(true);
+                            QuickAlert.show(
+                              context: context,
+                              type: QuickAlertType.confirm,
+                              text: 'Sure you want to share your Location?',
+                              confirmBtnText: 'Yes',
+                              cancelBtnText: 'No',
+                              confirmBtnColor: Colors.green,
+                              onConfirmBtnTap: () {
+                                // if (context
+                                //         .read<PostLocationProvider>()
+                                //         .isPosted ==
+                                //     false) {
+                                uploadPostLocation();
+                                //}
+                              },
+                            );
                           },
                           child: Icon(Icons.rocket_launch)),
                     ],

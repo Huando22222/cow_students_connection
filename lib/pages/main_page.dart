@@ -1,5 +1,6 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
-import 'package:cow_students_connection/pages/chat.dart';
+import 'package:cow_students_connection/pages/chat/chat_page.dart';
+import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 
 import 'package:cow_students_connection/pages/home.dart';
 import 'package:cow_students_connection/pages/location.dart';
@@ -34,6 +35,7 @@ class _MainPageState extends State<MainPage> {
       child: HomePage(),
     ),
     ChatPage(),
+    // ChatToPerson(),
     ChangeNotifierProvider(
       create: (context) => PostLocationProvider(),
       child: Location(),

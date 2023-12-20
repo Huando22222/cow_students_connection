@@ -7,13 +7,15 @@ import 'package:cow_students_connection/config/app_config.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
 import 'package:cow_students_connection/config/app_icon.dart';
 import 'package:cow_students_connection/data/models/account.dart';
+import 'package:cow_students_connection/data/models/room.dart';
 import 'package:cow_students_connection/data/models/user.dart';
+import 'package:cow_students_connection/pages/chatmessage.dart';
 import 'package:cow_students_connection/pages/facebook_login_page.dart';
 import 'package:cow_students_connection/pages/logged_in_page.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
+import 'package:cow_students_connection/providers/chat_provider.dart';
 import 'package:cow_students_connection/styles/app_colors.dart';
 import 'package:cow_students_connection/styles/app_text.dart';
-import 'package:cow_students_connection/util/socket/socket_client.dart';
 import 'package:cow_students_connection/util/socket/socket_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -124,11 +126,20 @@ class LoginPage extends StatelessWidget {
                         final accountData =
                             account.fromJson(responseData['account']);
                         context.read<AppRepo>().Account = accountData;
+                        //  Posts = (responseData["data"] as List)
+                        //     .map((data) => post.fromJson(data))
+                        //     .toList();
+                        //final roomData = room.fromjson(responseData['room']);
+                        context.read<ChatProvider>().rooms =
+                            (responseData['room'] as List)
+                                .map((data) => room.fromJson(data))
+                                .toList();
+                        print(
+                            "room: ${context.read<ChatProvider>().rooms[0].roomName}");
                         print(
                             "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
                         var userData = responseData['user'];
                         if (userData == null) {
-                          //object
                           print("user data have value null ( object )");
                           Navigator.of(context).pushNamed(AppRoutes.welcome);
                           // context.read<AppRepo>().User = userData;

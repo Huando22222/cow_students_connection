@@ -87,18 +87,6 @@ class AppPosted extends StatelessWidget {
                 ),
               ),
             ),
-
-          // SizedBox(
-          //   child: ClipRRect(
-          //     borderRadius: BorderRadius.circular(5),
-          //     child: Image.network(
-          //       "${AppConfig.baseUrl}images/${Post.images}",
-          //       height: 250,
-          //       width: 350,
-          //       fit: BoxFit.cover,
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );
