@@ -24,20 +24,25 @@ class PostLocationProvider extends ChangeNotifier {
         PostLocations = (responseData["data"] as List)
             .map((data) => postLocation.fromJson(data))
             .toList();
-        print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
-        if (PostLocations.any((location) =>
-            location.owner!.id == context.read<AppRepo>().User!.id)) {
-          isPosted = true;
+
+        if (PostLocations.isNotEmpty) {
+          print("pót lengh: ${PostLocations[0].id} -k ${PostLocations.length}");
+          if (PostLocations.any((location) =>
+              location.owner!.id == context.read<AppRepo>().User!.id)) {
+            isPosted = true;
+          } else {
+            isPosted = false;
+          }
+
         } else {
           isPosted = false;
         }
-
         notifyListeners();
       } else {
         print('Failed to load posts. Status code: ${response.statusCode}');
       }
     } catch (error) {
-      print('Error fetching posts OUT SIDE TRY: $error');
+      print('Error fetching posts: $error');
     }
   }
 }
