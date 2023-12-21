@@ -124,16 +124,15 @@ class LoginPage extends StatelessWidget {
                         final accountData =
                             account.fromJson(responseData['account']);
                         context.read<AppRepo>().Account = accountData;
-                        if (responseData['room'] != null) {
+                        if (!(responseData['room'] as List).isEmpty) {
+                          print("object room != null");
                           context.read<ChatProvider>().addListRooms(
                                 (responseData['room'] as List)
                                     .map((data) => room.fromJson(data))
                                     .toList(),
                               );
-
-                          print(
-                              "room: ${context.read<ChatProvider>().rooms[0].roomName}");
                         }
+
                         print(
                             "Received acc data: ${context.read<AppRepo>().Account!.idAcc}");
                         var userData = responseData['user'];
@@ -143,7 +142,8 @@ class LoginPage extends StatelessWidget {
                         } else {
                           userData = user.fromJson(responseData['user']);
                           context.read<AppRepo>().User = userData;
-
+                          _socketMethods
+                              .joinRoom(context.read<AppRepo>().User!.id!);
                           Navigator.of(context).pushNamed(AppRoutes.main);
                         }
                         //neviagave

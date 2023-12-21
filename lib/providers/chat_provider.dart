@@ -34,9 +34,13 @@ class ChatProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void addListRooms(List<room> rooms) {
-    rooms.clear();
-    rooms.addAll(rooms);
+  void addListRooms(List<room> room) {
+    // rooms.clear();
+    rooms.addAll(room);
+    room.forEach((element) {
+      // print(element.content);
+      _socketMethods.joinRoom(element.id);
+    });
     print("rooms length: ${rooms.length}");
     notifyListeners();
   }
