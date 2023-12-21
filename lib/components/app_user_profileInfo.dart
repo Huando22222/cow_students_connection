@@ -89,27 +89,42 @@ class UserProfileInfo extends StatelessWidget {
                               icon: Icon(Icons.message),
                               onPressed: () {
                                 /////////////////////////////////Find out if the user was in the same room
-                                String room = "unRoom";
-                                // room? matchingRoom;
-                                var matchingRoom = context
-                                    .read<ChatProvider>()
-                                    .rooms
-                                    .where(
-                                      (item) => item.users.any(
-                                          (user) => user.id == userProfile.id),
-                                    );
-                                if (matchingRoom.isNotEmpty) {
-                                  // print("====================================");
-                                  room = matchingRoom.first.id;
-                                }
+                                // String room = "unRoom";
+                                // // room? matchingRoom;
+                                // var matchingRoom = context
+                                //     .read<ChatProvider>()
+                                //     .rooms
+                                //     .where(
+                                //       (item) => item.users.any(
+                                //           (user) => user.id == userProfile.id),
+                                //     );
+                                // if (matchingRoom.isNotEmpty) {
+                                //   // print("====================================");
+                                //   room = matchingRoom.first.id;
+                                // }
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => ChatToPerson(
-                                      titleAppBar:
-                                          "${userProfile.firstName} ${userProfile.lastName}",
-                                      userInfo: userProfile,
-                                      room: room,
+                                    builder: (context) =>
+                                        Consumer<ChatProvider>(
+                                      builder: (context, value, child) {
+                                        String room = "unRoom";
+                                        // room? matchingRoom;
+                                        var matchingRoom = context
+                                            .read<ChatProvider>()
+                                            .rooms
+                                            .where(
+                                              (item) => item.users.any((user) =>
+                                                  user.id == userProfile.id),
+                                            );
+                                        if (matchingRoom.isNotEmpty) {
+                                          room = matchingRoom.first.id;
+                                        }
+                                        return ChatToPerson(
+                                          userInfo: userProfile,
+                                          room: room,
+                                        );
+                                      },
                                     ),
                                   ),
                                 );

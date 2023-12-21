@@ -11,12 +11,10 @@ import 'package:cow_students_connection/providers/chat_provider.dart';
 import 'package:cow_students_connection/util/socket/socket_methods.dart';
 
 class ChatToPerson extends StatelessWidget {
-  final String titleAppBar;
   final String room;
   final user userInfo;
   const ChatToPerson({
     Key? key,
-    this.titleAppBar = "new COW",
     required this.room,
     required this.userInfo,
   }) : super(key: key);
@@ -28,7 +26,7 @@ class ChatToPerson extends StatelessWidget {
     String content = "";
 
     return Scaffold(
-      appBar: AppBar(title: Text(titleAppBar)),
+      appBar: AppBar(title: Text("${userInfo.firstName} ${userInfo.lastName}")),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
         child: Column(
@@ -60,20 +58,21 @@ class ChatToPerson extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Message = message(
-                      content: content,
-                      sender: context.read<AppRepo>().User!,
-                      room: room,
-                    );
                     // content = "";
-                    // print("sent: ${Message!.content}");
-
+                    // print("sent: ${Message!.content}");//asdasdasdas
+                    print("room ${room} : - ChatToPerson");
                     if (room == "unRoom") {
                       List<String> member = [];
                       member.add(userInfo.id!);
                       member.add(context.read<AppRepo>().User!.id!);
                       _socketMethods.createRoom(member);
+                      /////////gui ca tn nua!!!!!!!!!!!!!!!!!!!!!!!!
                     } else {
+                      Message = message(
+                        content: content,
+                        sender: context.read<AppRepo>().User!,
+                        room: room,
+                      );
                       _socketMethods.Send(Message!);
                     }
                   },

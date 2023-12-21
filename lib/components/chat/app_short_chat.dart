@@ -35,7 +35,7 @@ class AppShortChat extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) => ChatToPerson(
-              titleAppBar: chatTo,
+              // titleAppBar: chatTo,
               room: msg.room,
               userInfo: otherUser,
             ),

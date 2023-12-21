@@ -134,35 +134,26 @@ class _OTPPageState extends State<OTPPage> {
               onPressed: () async {
                 try {
                   print("into tryCatch: $smsCode");
-                  // Create a PhoneAuthCredential with the code
                   PhoneAuthCredential credential = PhoneAuthProvider.credential(
                     verificationId: Register.verify,
                     smsCode: smsCode,
                   );
 
-                  // Sign the user in (or link) with the credential
                   await auth.signInWithCredential(credential);
                   focusNode.unfocus();
                   formKey.currentState!.validate();
-
-                  // Navigator.of(context).pushNamed(AppRoutes.login);
-                  // print("${phone} ${password}");
-                  // Gửi thông tin tài khoản và mật khẩu đến máy chủ localhost:3000
-
                   final response = await http.post(
-                    Uri.parse(
-                        '${AppConfig.baseUrl}user/register'), // Thay đổi URL và endpoint của bạn
-                    // 'http://172.16.16.57:3000/user/register'), // Thay đổi URL và endpoint của bạn
+                    Uri.parse('${AppConfig.baseUrl}user/register'),
                     body: {
-                      'phone': phone, // Thay thế bằng tên người dùng
-                      'password': password, // Thay thế bằng mật khẩu
+                      'phone': phone,
+                      'password': password,
                       'displayName': "",
                       "email": "",
                       "id": "",
                       "photoUrl": "",
                     },
                   );
-
+                  print("status code OTP: ${response.statusCode}");
                   if (response.statusCode == 200) {
                     // Xử lý phản hồi từ máy chủ (nếu cần)
                     context.read<AppRepo>().password = ""; // security hehhee
@@ -174,8 +165,8 @@ class _OTPPageState extends State<OTPPage> {
                         'Lỗi khi gửi thông tin đến máy chủ: ${response.statusCode}');
                   }
                 } catch (e) {
-                  print("Register verify: ${Register.verify}");
-                  print("value code in catch ERROR: $smsCode");
+                  print(
+                      "value code in catch ERROR: $smsCode ---------------${Register.verify}");
                   print(
                     " $e wrong at OTP\n-----------------------------------------------------------",
                   );
