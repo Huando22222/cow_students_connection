@@ -3,5 +3,5 @@ class AppConfig {
   static const baseUrl = "http://${baseIp}:3000/";
   static const baseWs = "ws://${baseIp}:3000/";
 
-  static const baseIp = "192.168.1.47"; //Huan
+  static const baseIp = "172.16.16.174"; //Huan
 }

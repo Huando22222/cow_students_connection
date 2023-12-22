@@ -46,7 +46,7 @@ class SocketMethods {
       print("On receive message: ");
       message receivedMessage = message.fromJson(newMessage);
       try {
-        print("data exists ${receivedMessage.sender.id} ");
+        print("data recieve exists ${receivedMessage} ");
         context.read<ChatProvider>().addMessage(receivedMessage);
       } catch (error) {
         print("Error in recieve listener: $error");
@@ -75,14 +75,20 @@ class SocketMethods {
     });
   }
 
-  createRoom(List<String> member) {
+  createRoom(List<String> member, message Messages) {
     print("create Room!!!!!!!!!!!!!!!!!!!!!");
-    // for (var item in member) {
-    //   print("userID: " + item);
-    // }
+    for (var item in member) {
+      print("userID: " + item);
+    }
+
+    String msg = json.encode(Messages.toJson());
     _socketClient.emit(
       "create-room",
-      {member},
+      // {member, msg},
+      {
+        "member": member,
+        "msg": msg,
+      },
     );
   }
 
@@ -90,22 +96,6 @@ class SocketMethods {
     _socketClient.emit('join-room', roomName);
     print("joined room: ${roomName}");
   }
-
-  // Send(String content, user sender, String room) {
-  //   String jsonString = json.encode({
-  //     'content': content,
-  //     'sender': sender,
-  //     // 'room': room,
-  //   });
-
-  //   _socketClient.emit('send-to', {jsonString, room});
-  // }
-
-  // Send(message Messages) {
-  //   String jsonString = json.encode(Messages.toJson());
-  //   String room = "test hard codce room";
-  //   _socketClient.emit('send-to', {jsonString, room});
-  // }
 
   Send(message Messages) {
     String jsonString = json.encode(Messages.toJson());
