@@ -21,6 +21,7 @@ class ChatToPerson extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController _textFieldController = TextEditingController();
     final SocketMethods _socketMethods = SocketMethods();
     message? Message;
     String content = "";
@@ -28,7 +29,7 @@ class ChatToPerson extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("${userInfo.firstName} ${userInfo.lastName}")),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+        padding: const EdgeInsets.only(left: 10, right: 10, bottom: 20),
         child: Column(
           children: [
             Expanded(
@@ -48,6 +49,7 @@ class ChatToPerson extends StatelessWidget {
               children: [
                 Expanded(
                   child: AppTextField(
+                    controller: _textFieldController,
                     onChanged: (value) {
                       content = value;
                       print(content);
@@ -75,7 +77,8 @@ class ChatToPerson extends StatelessWidget {
                       print("room ${room} : - ChatToPerson - create room");
                       /////////gui ca tn nua!!!!!!!!!!!!!!!!!!!!!!!!
                     } else {
-                      print("room ${room} : - ChatToPerson - sent");
+                      print(
+                          "room ${room} : - ChatToPerson - sent content: ${content}");
                       _socketMethods.Send(Message!);
                     }
                   },

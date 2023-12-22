@@ -13,11 +13,14 @@ class ChatMeItem extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 225, 221, 208),
           borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(15), topLeft: Radius.circular(15)),
+              bottomLeft: Radius.circular(15),
+              topLeft: Radius.circular(15),
+              bottomRight: Radius.circular(5),
+              topRight: Radius.circular(5)),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
-          child: Text(chat, style: AppText.body1),
+          padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10),
+          child: Text(chat, style: AppText.message),
         ),
       ),
     );

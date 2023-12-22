@@ -1,9 +1,15 @@
 import 'package:cow_students_connection/data/models/message.dart';
 import 'package:cow_students_connection/data/models/room.dart';
+import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/util/socket/socket_methods.dart';
 import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
+  // final AppRepo appRepo;
+  // ChatProvider(this.appRepo);
+
+  ///????????????????????????
+  ///////////////////////////////
   List<message> chats = [];
   List<room> rooms = [];
   final SocketMethods _socketMethods = SocketMethods();
