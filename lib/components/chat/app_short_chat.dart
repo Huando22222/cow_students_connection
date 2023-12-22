@@ -46,7 +46,7 @@ class AppShortChat extends StatelessWidget {
         child: Row(
           children: [
             AppAvatar(
-              pathImage: context.read<AppRepo>().User!.avatar,
+              pathImage: otherUser.avatar,
               size: 70,
             ), //context.read<AppRepo>().User!.avatar//test//otherUser.avatar
             SizedBox(

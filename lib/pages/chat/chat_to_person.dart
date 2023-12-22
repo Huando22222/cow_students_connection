@@ -33,7 +33,8 @@ class ChatToPerson extends StatelessWidget {
           children: [
             Expanded(
               child: room == "unRoom"
-                  ? Text("you and ${userInfo.lastName} not have message yet ")
+                  ? Text(
+                      "you and ${userInfo.lastName} don't have a conversation before  ")
                   : Consumer<ChatProvider>(
                       builder: (context, value, child) {
                         return AppChat(
@@ -60,19 +61,21 @@ class ChatToPerson extends StatelessWidget {
                   onTap: () {
                     // content = "";
                     // print("sent: ${Message!.content}");//asdasdasdas
-                    print("room ${room} : - ChatToPerson");
+                    Message = message(
+                      content: content,
+                      sender: context.read<AppRepo>().User!,
+                      room: room,
+                    );
+
                     if (room == "unRoom") {
                       List<String> member = [];
                       member.add(userInfo.id!);
                       member.add(context.read<AppRepo>().User!.id!);
-                      _socketMethods.createRoom(member);
+                      _socketMethods.createRoom(member, Message!);
+                      print("room ${room} : - ChatToPerson - create room");
                       /////////gui ca tn nua!!!!!!!!!!!!!!!!!!!!!!!!
                     } else {
-                      Message = message(
-                        content: content,
-                        sender: context.read<AppRepo>().User!,
-                        room: room,
-                      );
+                      print("room ${room} : - ChatToPerson - sent");
                       _socketMethods.Send(Message!);
                     }
                   },
