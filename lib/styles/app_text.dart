@@ -39,4 +39,14 @@ class AppText {
     fontSize: 10,
     fontWeight: FontWeight.w100,
   );
+
+  static const message = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const subMessage = TextStyle(
+    fontSize: 17,
+    fontWeight: FontWeight.w400,
+  );
 }

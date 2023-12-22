@@ -3,6 +3,7 @@ import 'package:cow_students_connection/data/models/message.dart';
 import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/providers/app_repo.dart';
 import 'package:cow_students_connection/providers/chat_provider.dart';
+import 'package:cow_students_connection/styles/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,22 +44,45 @@ class AppShortChat extends StatelessWidget {
         );
       },
       child: Container(
-        child: Row(
-          children: [
-            AppAvatar(
-              pathImage: otherUser.avatar,
-              size: 70,
-            ), //context.read<AppRepo>().User!.avatar//test//otherUser.avatar
-            SizedBox(
-              width: 10,
-            ),
-            Column(
-              children: [
-                Text(chatTo),
-                Text("${latestSender}: ${msg.content}"),
-              ],
-            ),
-          ],
+        // color: Colors.white,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AppAvatar(
+                pathImage: otherUser.avatar,
+                size: 70,
+              ), //context.read<AppRepo>().User!.avatar//test//otherUser.avatar
+              SizedBox(
+                width: 10,
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(chatTo, style: AppText.message),
+                    SizedBox(height: 5),
+                    Row(
+                      children: [
+                        Text(
+                          "${latestSender}: ${msg.content}",
+                          style: AppText.subMessage,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
