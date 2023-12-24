@@ -1,5 +1,5 @@
 import 'package:cow_students_connection/components/bottom_navigation_item.dart';
-/////tao folder chat 
+/////tao folder chat
 import 'package:cow_students_connection/pages/chat/chat_page.dart';
 import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 
@@ -53,7 +53,9 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // extendBody: true, // tranparent background
       body: pages[currentIndex.index],
+      // backgroundColor: Colors.transparent,
       bottomNavigationBar: CustomNavigation(
         currentIndex: currentIndex,
         onTap: (value) {
@@ -80,7 +82,8 @@ class CustomNavigation extends StatelessWidget {
   final Menu currentIndex;
   final ValueChanged<Menu> onTap;
   const CustomNavigation({
-    super.key,
+    // super.key,
+    Key? key,
     required this.currentIndex,
     required this.onTap,
   });
@@ -88,8 +91,10 @@ class CustomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 87,
+      height: 80,
       margin: EdgeInsets.all(10),
+      // color: Colors.transparent,
+      color: Colors.transparent,
       child: Container(
         height: 70,
         decoration: BoxDecoration(

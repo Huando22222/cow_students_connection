@@ -21,61 +21,79 @@ class AppPosted extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              // AppAvatar(pathImage: Post.owner!.avatar),
-              AppAvatar(
-                onImagePicked: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              UserProfileInfo(userProfile: Post.owner!)));
-                },
-                pathImage: Post.owner!.avatar,
-              ),
-              SizedBox(width: 10),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(5), // Thêm borderRadius vào đây
+      ),
+      child: Padding(
+        padding:
+            const EdgeInsets.only(left: 5.0, right: 5, top: 10, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            UserProfileInfo(userProfile: Post.owner!)));
+              },
+              child: Row(
                 children: [
-                  Text("${Post.owner!.firstName} ${Post.owner!.lastName}"),
-                  Text(
-                    "${Post.createdAt!.hour}:${Post.createdAt!.minute}",
-                    style: AppText.note,
+                  // AppAvatar(pathImage: Post.owner!.avatar),
+                  AppAvatar(
+                    // onImagePicked: () {
+                    //   // Navigator.push(
+                    //   //     context,
+                    //   //     MaterialPageRoute(
+                    //   //         builder: (context) =>
+                    //   //             UserProfileInfo(userProfile: Post.owner!)));
+                    // },
+                    pathImage: Post.owner!.avatar,
+                  ),
+                  SizedBox(width: 10),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("${Post.owner!.firstName} ${Post.owner!.lastName}"),
+                      Text(
+                        "${Post.createdAt!.hour}:${Post.createdAt!.minute}",
+                        style: AppText.note,
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-          // parameters post & user
-          if (Post.message != "")
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0, top: 8.0),
-              child: Text(
-                Post.message!,
-                style: Post.images != "" ? AppText.subtitle1 : AppText.header2,
-              ),
             ),
-          if (Post.images != "")
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return ZoomedImageScreen(
-                      imageUrl: "${AppConfig.baseUrl}images/${Post.images}",
-                      onClose: () {
-                        Navigator.of(context).pop(); // Đóng màn hình phóng to
-                      },
-                    );
-                  },
-                ));
-              },
-              child: SizedBox(
+            // parameters post & user
+            if (Post.message != "")
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0, top: 5),
+                child: Text(
+                  Post.message!,
+                  style:
+                      Post.images != "" ? AppText.subtitle1 : AppText.header2,
+                ),
+              ),
+            SizedBox(
+              height: 8,
+            ),
+            if (Post.images != "")
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) {
+                      return ZoomedImageScreen(
+                        imageUrl: "${AppConfig.baseUrl}images/${Post.images}",
+                        onClose: () {
+                          Navigator.of(context).pop(); // Đóng màn hình phóng to
+                        },
+                      );
+                    },
+                  ));
+                },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(5),
                   child: Image.network(
@@ -86,8 +104,8 @@ class AppPosted extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
-        ],
+          ],
+        ),
       ),
     );
   }

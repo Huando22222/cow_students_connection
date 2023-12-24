@@ -1,5 +1,6 @@
 import 'package:cow_students_connection/components/chat/app_short_chat.dart';
 import 'package:cow_students_connection/config/app_routes.dart';
+import 'package:cow_students_connection/data/models/message.dart';
 import 'package:cow_students_connection/data/models/user.dart';
 import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/pages/home.dart';
@@ -22,7 +23,6 @@ class ChatPage extends StatelessWidget {
             Expanded(
               child: Consumer<ChatProvider>(
                 builder: (context, value, child) {
-                  List<String> listRooms = [];
                   if (value.chats.isEmpty) {
                     return Center(
                       child: InkWell(
@@ -33,22 +33,28 @@ class ChatPage extends StatelessWidget {
                       ),
                     );
                   } else {
+                    List<String> listRooms = [];
+                    List<message> listMessages = [];
+                    for (var index = value.chats.length - 1;
+                        index >= 0;
+                        index--) {
+                      if (!listRooms.contains(value.chats[index].room)) {
+                        //////////// nên đưa ra ngoàI ListView rồI thay thế ListView = cái j đó khác
+                        listRooms.add(value.chats[index].room);
+                        listMessages.add(value.chats[index]);
+                      }
+                    }
                     return ListView.separated(
                       itemBuilder: (context, index) {
-                        int reversedIndex = value.chats.length - 1 - index;
-                        String room = value.chats[reversedIndex].room;
-                        if (!listRooms.contains(room)) {
-                          listRooms.add(room);
-                          print("room chat_page: ${room}");
-                          return AppShortChat(msg: value.chats[reversedIndex]);
-                        }
+                        // if(value..chats[index].room=)
+                        return AppShortChat(msg: listMessages[index]);
                       },
                       separatorBuilder: (context, index) {
                         return SizedBox(
                           height: 5,
                         );
                       },
-                      itemCount: listRooms.length + 1,
+                      itemCount: listRooms.length,
                     );
                   }
                 },

@@ -1,6 +1,11 @@
 import 'dart:io';
+import 'package:cow_students_connection/components/app_button.dart';
+import 'package:cow_students_connection/config/app_routes.dart';
+import 'package:cow_students_connection/data/models/message.dart';
+import 'package:cow_students_connection/data/models/room.dart';
 import 'package:cow_students_connection/pages/chat/chat_to_person.dart';
 import 'package:cow_students_connection/providers/chat_provider.dart';
+import 'package:cow_students_connection/util/socket/socket_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -28,6 +33,7 @@ class UserProfileInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // final SocketMethods _socketMethods = SocketMethods();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -83,54 +89,98 @@ class UserProfileInfo extends StatelessWidget {
                                 onEditProfile!();
                               },
                             ),
-                          Align(
-                            alignment: Alignment.topRight,
-                            child: IconButton(
-                              icon: Icon(Icons.message),
-                              onPressed: () {
-                                /////////////////////////////////Find out if the user was in the same room
-                                // String room = "unRoom";
-                                // // room? matchingRoom;
-                                // var matchingRoom = context
-                                //     .read<ChatProvider>()
-                                //     .rooms
-                                //     .where(
-                                //       (item) => item.users.any(
-                                //           (user) => user.id == userProfile.id),
-                                //     );
-                                // if (matchingRoom.isNotEmpty) {
-                                //   // print("====================================");
-                                //   room = matchingRoom.first.id;
-                                // }
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        Consumer<ChatProvider>(
-                                      builder: (context, value, child) {
-                                        String room = "unRoom";
-                                        // room? matchingRoom;
-                                        var matchingRoom = context
-                                            .read<ChatProvider>()
-                                            .rooms
-                                            .where(
-                                              (item) => item.users.any((user) =>
-                                                  user.id == userProfile.id),
-                                            );
-                                        if (matchingRoom.isNotEmpty) {
-                                          room = matchingRoom.first.id;
-                                        }
-                                        return ChatToPerson(
-                                          userInfo: userProfile,
-                                          room: room,
-                                        );
-                                      },
+                          if (userProfile.id !=
+                              context.read<AppRepo>().User?.id)
+                            Align(
+                              alignment: Alignment.topRight,
+                              child: IconButton(
+                                icon: Icon(Icons.message),
+                                onPressed: () {
+                                  /////////////////////////////////Find out if the user was in the same room
+                                  // String room = "unRoom";
+                                  // // room? matchingRoom;
+                                  // var matchingRoom = context
+                                  //     .read<ChatProvider>()
+                                  //     .rooms
+                                  //     .where(
+                                  //       (item) => item.users.any(
+                                  //           (user) => user.id == userProfile.id),
+                                  //     );
+                                  // if (matchingRoom.isNotEmpty) {
+                                  //   // print("====================================");
+                                  //   room = matchingRoom.first.id;
+                                  // }
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          Consumer<ChatProvider>(
+                                        builder: (context, value, child) {
+                                          // List<String> listRooms = [];
+                                          // List<message> listMessages = [];
+                                          // for (var index = value.chats.length - 1;
+                                          //     index >= 0;
+                                          //     index--) {
+                                          //   if (!listRooms.contains(
+                                          //       value.chats[index].room)) {
+                                          //     //////////// nên đưa ra ngoàI ListView rồI thay thế ListView = cái j đó khác
+                                          //     listRooms
+                                          //         .add(value.chats[index].room);
+                                          //     listMessages
+                                          //         .add(value.chats[index]);
+                                          //   }
+                                          // }
+
+                                          // print('abc');
+                                          String unRoom = "unRoom";
+                                          List<room> listRooms = context
+                                              .read<ChatProvider>()
+                                              .rooms;
+                                          for (var room in listRooms) {
+                                            for (var user in room.users) {
+                                              if (user.id == userProfile.id) {
+                                                unRoom = room.id;
+                                              }
+                                            }
+                                          }
+                                          print(unRoom);
+                                          // // room? matchingRoom;
+                                          // room matchingRoom = context
+                                          //     .read<ChatProvider>()
+                                          //     .rooms
+                                          //     .map((room) {
+                                          //   if (room.users
+                                          //           .contains(userProfile.id) &&
+                                          //       room.users.contains(context
+                                          //           .read<AppRepo>()
+                                          //           .User!
+                                          //           .id)) {
+                                          //     return room;
+                                          //   }
+                                          //   return null;
+                                          // }) as room;
+                                          // print(matchingRoom);
+                                          // .where(
+                                          //   (item) => item.users.any((user) =>
+                                          //       user.id == userProfile.id),
+                                          // );
+                                          // if (matchingRoom.isNotEmpty) {
+                                          //   unRoom =
+                                          //       matchingRoom.first?.id ?? unRoom;
+                                          //   print(
+                                          //       "Matching room :  ${matchingRoom.first?.id}");
+                                          // }
+                                          return ChatToPerson(
+                                            userInfo: userProfile,
+                                            room: unRoom,
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                );
-                              },
+                                  );
+                                },
+                              ),
                             ),
-                          ),
                         ],
                       ),
                       Text(
@@ -171,14 +221,14 @@ class UserProfileInfo extends StatelessWidget {
                   ),
                   ListTile(
                     leading: Icon(Icons.info_rounded),
-                    title: Text('ID Account'),
+                    title: Text('ID user'),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('${userProfile!.idAcc}'),
+                        Text('${userProfile.id}'),
                         SizedBox(height: 5),
                         QrImageView(
-                          data: '${userProfile!.idAcc}',
+                          data: '${userProfile.id}',
                           version: QrVersions.auto,
                           size: 200.0,
                         ),
@@ -194,6 +244,25 @@ class UserProfileInfo extends StatelessWidget {
                 ],
               ),
             ),
+            if (userProfile.id == context.read<AppRepo>().User!.id)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                // mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AppButton(
+                    text: "logout account",
+                    onPressed: () {
+                      context.read<ChatProvider>().clearChatProvider();
+                      context.read<AppRepo>().logoutAcc();
+                      Navigator.of(context)
+                          .pushReplacementNamed(AppRoutes.login);
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                ],
+              ),
           ],
         ),
       ),

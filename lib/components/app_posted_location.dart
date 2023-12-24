@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:cow_students_connection/components/app_text_field.dart';
 import 'package:cow_students_connection/components/app_user_profileInfo.dart';
 import 'package:cow_students_connection/config/app_config.dart';
+import 'package:cow_students_connection/data/models/room.dart';
 import 'package:cow_students_connection/pages/location.dart';
+import 'package:cow_students_connection/providers/chat_provider.dart';
 import 'package:cow_students_connection/providers/post_location_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -86,11 +88,12 @@ class AppPostedLocation extends StatelessWidget {
                 AppAvatar(
                   onImagePicked: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => UserProfileInfo(
-                                  userProfile: userProfile,
-                                )));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            UserProfileInfo(userProfile: userProfile),
+                      ),
+                    );
                   },
                   pathImage: userProfile.avatar,
                 ),
@@ -102,7 +105,8 @@ class AppPostedLocation extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(width: 10),
+                // SizedBox(width: 10),
+                Spacer(),
                 Row(
                   children: [
                     Visibility(
@@ -111,10 +115,27 @@ class AppPostedLocation extends StatelessWidget {
                       child: IconButton(
                         icon: Icon(Icons.message),
                         onPressed: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(builder: (context) => ChatToPerson()),//////////////////huan fix sau lai
-                          // );
+                          String unRoom = "unRoom";
+                          List<room> listRooms =
+                              context.read<ChatProvider>().rooms;
+                          for (var room in listRooms) {
+                            for (var user in room.users) {
+                              if (user.id == userProfile.id) {
+                                unRoom = room.id;
+                              }
+                            }
+                          }
+                          ////////////////////////////
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatToPerson(
+                                // titleAppBar: chatTo,
+                                userInfo: userProfile,
+                                room: unRoom,
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
