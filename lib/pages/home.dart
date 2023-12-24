@@ -41,25 +41,29 @@ class _HomePageState extends State<HomePage> {
       child: RefreshIndicator(
         onRefresh: () => context.read<PostProvider>().fetchPosts(),
         // onRefresh: _refresh,
-        child: Column(
-          children: [
-            AppPostNews(),
-            Expanded(
-              child: Consumer<PostProvider>(builder: (context, value, child) {
-                return ListView.separated(
-                  itemBuilder: (context, index) {
-                    return AppPosted(Post: value.Posts[index]);
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(
-                      height: 30,
-                    );
-                  },
-                  itemCount: value.Posts.length,
-                );
-              }),
-            ),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Column(
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              AppPostNews(),
+              Expanded(
+                child: Consumer<PostProvider>(builder: (context, value, child) {
+                  return ListView.separated(
+                    itemBuilder: (context, index) {
+                      return AppPosted(Post: value.Posts[index]);
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return SizedBox(
+                        height: 20,
+                      );
+                    },
+                    itemCount: value.Posts.length,
+                  );
+                }),
+              ),
+            ],
+          ),
         ),
         /////////listView
       ),

@@ -1,14 +1,24 @@
 class user {
-  final String? id;
-  final String? firstName;
-  final String? lastName;
-  final DateTime? birthDay;
-  final String? gender;
-  final String? avatar;
-  final String? phone;
-  final List<user>? friends;
-  final List<String>? rooms;
-  final String idAcc;
+  String? id;
+  String? firstName;
+  String? lastName;
+  DateTime? birthDay;
+  String? gender;
+  String? avatar;
+  String? phone;
+  List<user>? friends;
+  List<String>? rooms;
+  String idAcc;
+  // final String? id;
+  // final String? firstName;
+  // final String? lastName;
+  // final DateTime? birthDay;
+  // final String? gender;
+  // final String? avatar;
+  // final String? phone;
+  // final List<user>? friends;
+  // final List<String>? rooms;
+  // final String idAcc;
 
   user({
     this.id,

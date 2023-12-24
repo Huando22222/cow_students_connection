@@ -111,6 +111,8 @@ class LoginPage extends StatelessWidget {
                       final response = await http.post(
                         Uri.parse('${AppConfig.baseUrl}user/login'),
                         body: {
+                          // 'phone': "0833677402",
+                          // 'password': "12345678",
                           'phone': context.read<AppRepo>().phone,
                           'password': context.read<AppRepo>().password,
                         },

@@ -74,84 +74,89 @@ class AppNewPostLocation extends StatelessWidget {
           child: ClipRRect(
             borderRadius:
                 BorderRadius.circular(15.0), // Đây là giá trị bo tròn cạnh
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Row(
-                children: [
-                  AppAvatar(
-                    pathImage: userProfile.avatar,
-                    size: 75,
-                  ),
-                  SizedBox(width: 10),
-                  Text(
-                    '${userProfile.firstName} ${userProfile.lastName}',
-                    style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(width: 10),
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.map),
-                        onPressed: () {
-                          _openInGoogleMaps(point.latitude, point.longitude);
-                        },
-                      ),
-                    ],
-                  )
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(25.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   children: [
-                    // Profile Picture
-
-                    SizedBox(height: 10),
-                    // Name
-
+                    AppAvatar(
+                      pathImage: userProfile.avatar,
+                      size: 75,
+                    ),
+                    SizedBox(width: 10),
+                    Text(
+                      '${userProfile.firstName} ${userProfile.lastName}',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    // SizedBox(width: 10),
+                    Spacer(),
                     Row(
                       children: [
-                        Expanded(child: AppTextField(
-                          onChanged: (value) {
-                            print(value);
-                            content = value;
+                        IconButton(
+                          icon: Icon(Icons.map),
+                          onPressed: () {
+                            _openInGoogleMaps(point.latitude, point.longitude);
                           },
-                        )),
-                        SizedBox(width: 10),
-                        InkWell(
-                            onTap: () {
-                              print(userProfile.firstName);
-                              print(content);
-                              print('${point.latitude} - ${point.longitude}');
-
-                              QuickAlert.show(
-                                context: context,
-                                type: QuickAlertType.confirm,
-                                text: 'Sure you want to share your Location?',
-                                confirmBtnText: 'Yes',
-                                cancelBtnText: 'No',
-                                confirmBtnColor: Colors.green,
-                                onConfirmBtnTap: () {
-                                  // if (context
-                                  //         .read<PostLocationProvider>()
-                                  //         .isPosted ==
-                                  //     false) {
-                                  uploadPostLocation();
-                                  //}
-                                },
-                              );
-                            },
-                            child: Icon(Icons.rocket_launch)),
+                        ),
                       ],
                     )
                   ],
                 ),
-              ),
-            ]),
+                Padding(
+                  padding: const EdgeInsets.all(25.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Profile Picture
+
+                      SizedBox(height: 10),
+                      // Name
+
+                      Row(
+                        children: [
+                          Expanded(
+                            child: AppTextField(
+                              onChanged: (value) {
+                                print(value);
+                                content = value;
+                              },
+                            ),
+                          ),
+                          SizedBox(width: 10),
+                          InkWell(
+                              onTap: () {
+                                print(userProfile.firstName);
+                                print(content);
+                                print('${point.latitude} - ${point.longitude}');
+
+                                QuickAlert.show(
+                                  context: context,
+                                  type: QuickAlertType.confirm,
+                                  text: 'Sure you want to share your Location?',
+                                  confirmBtnText: 'Yes',
+                                  cancelBtnText: 'No',
+                                  confirmBtnColor: Colors.green,
+                                  onConfirmBtnTap: () {
+                                    // if (context
+                                    //         .read<PostLocationProvider>()
+                                    //         .isPosted ==
+                                    //     false) {
+                                    uploadPostLocation();
+                                    //}
+                                  },
+                                );
+                              },
+                              child: Icon(Icons.rocket_launch)),
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

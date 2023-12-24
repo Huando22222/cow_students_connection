@@ -13,4 +13,17 @@ class AppRepo extends ChangeNotifier {
   ////////////
   account? Account;
   user? User;
+
+  void logoutAcc() {
+    this.password = null;
+    this.displayName = null;
+    this.phone = null;
+    this.email = null;
+    this.id = null;
+    this.photoUrl = null;
+    this.Account = null;
+    this.User = null;
+  }
+  // void
+  // void
 }

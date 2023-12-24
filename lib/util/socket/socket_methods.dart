@@ -19,7 +19,6 @@ class SocketMethods {
     _socketClient.onConnect((data) {
       // List<room> rooms = context.read<ChatProvider>().rooms;
       print("Socket connected: ${_socketClient.id}");
-      // joinRoom("657ef0d7baf32fe21da8b42b");
       joinRoom(context.read<AppRepo>().User!.id!);
       // for (var room in rooms) {
       //   joinRoom(room.id);
@@ -35,7 +34,7 @@ class SocketMethods {
         room recievedRoom = room.fromJson(data);
         print("created room from socket: ${recievedRoom.id}"); // huan sua sau
         context.read<ChatProvider>().addRoom(recievedRoom);
-        joinRoom(recievedRoom.id);
+        // joinRoom(recievedRoom.id);
         print("successfully added room & joined ${recievedRoom.id}");
       } catch (e) {
         print("Error in add-room: $e");

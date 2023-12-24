@@ -185,6 +185,10 @@ class _LocationState extends State<Location> {
           ),
         ],
       ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+
+      // extendBody: false,
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,

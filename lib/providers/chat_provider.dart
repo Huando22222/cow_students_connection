@@ -24,15 +24,15 @@ class ChatProvider extends ChangeNotifier {
   }
 
   void addListMessages(List<message> messages) {
-    chats.clear();
+    // chats.clear(); //???????????????????????
     chats.addAll(messages);
     print("chats length: ${chats.length}");
     notifyListeners();
   }
 
-  void addRoom(room room) {
+  void addRoom(room room) async {
     rooms.add(room);
-    _socketMethods.joinRoom(room.id);
+    await _socketMethods.joinRoom(room.id);
     // chats.forEach((element) {
     //   print(element.content);
     // });
@@ -49,5 +49,10 @@ class ChatProvider extends ChangeNotifier {
     });
     print("rooms length: ${rooms.length}");
     notifyListeners();
+  }
+
+  void clearChatProvider() {
+    chats.clear();
+    rooms.clear();
   }
 }

@@ -23,7 +23,7 @@ class AppShortChat extends StatelessWidget {
     String chatTo = "";
     var matchingRoom = context.read<ChatProvider>().rooms.firstWhere(
           (room) => room.id == msg.room,
-        );
+        ); //trường hợp 2 user ở chung trong 2 phòng nên không thể xác định // widget này dùng chung với widget AppUserInfor
 
     var otherUser = matchingRoom.users.firstWhere(
       (user) => user.id != context.read<AppRepo>().User!.id,
@@ -32,6 +32,9 @@ class AppShortChat extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        print("go into room: ${msg.room} - ${otherUser.firstName}");
+        print(
+            " chat length of chats: ${context.read<ChatProvider>().chats.length}");
         Navigator.push(
           context,
           MaterialPageRoute(
